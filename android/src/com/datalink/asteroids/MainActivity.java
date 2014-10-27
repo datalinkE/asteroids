@@ -19,20 +19,26 @@ public class MainActivity extends Activity {
 						
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
-        
-        final boolean supportsEs2 =
-            configurationInfo.reqGlEsVersion >= 0x20000
-            	// Emulator checks
-                || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1 
-                 && (Build.FINGERPRINT.startsWith("generic")
-                  || Build.FINGERPRINT.startsWith("unknown")
-                  || Build.MODEL.contains("google_sdk") 
-                  || Build.MODEL.contains("Emulator")
-                  || Build.MODEL.contains("Android SDK built for x86")));
 
-        if (supportsEs2) {
+        final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
+        
+        final boolean fingerprintLikeEmulator = 
+               Build.FINGERPRINT.startsWith("generic")
+            || Build.FINGERPRINT.startsWith("unknown");
+        
+        final boolean modelLikeEmulator =
+               Build.MODEL.contains("google_sdk") 
+            || Build.MODEL.contains("Emulator")
+            || Build.MODEL.contains("Android SDK built for x86");
+        
+        final boolean looksLikeEmulator = 
+               Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1
+            && fingerprintLikeEmulator && modelLikeEmulator;
+
+        if (supportsEs2 || looksLikeEmulator) {
         	glSurfaceView = new GLSurfaceView(this);
-        	glSurfaceView.setEGLContextClientVersion(2);                        
+        	glSurfaceView.setEGLContextClientVersion(2);
+        	glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0); // TODO: find out optimal value
             glSurfaceView.setRenderer(new RendererWrapper());
             rendererSet = true;                        
             setContentView(glSurfaceView);
