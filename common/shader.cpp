@@ -1,47 +1,29 @@
 #include "GLHelpers.h"
 
 #include "platform_gl.h"
-#include "platform_log.h"
+#include "Logger.hpp"
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define TAG "shaders"
-#define LOGGING_ON 1
-
 namespace GLHelpers
 {
-
-	void log_v_fixed_length(const GLchar* source, const GLint length) {
-		if (LOGGING_ON) {
-			char log_buffer[length + 1];
-			memcpy(log_buffer, source, length);
-			log_buffer[length] = '\0';
-
-			DEBUG_LOG_WRITE_V(TAG, log_buffer);
-		}
-	}
-
 	void log_shader_info_log(GLuint shader_object_id) {
-		if (LOGGING_ON) {
-			GLint log_length;
-			glGetShaderiv(shader_object_id, GL_INFO_LOG_LENGTH, &log_length);
-			GLchar log_buffer[log_length];
-			glGetShaderInfoLog(shader_object_id, log_length, NULL, log_buffer);
+		GLint log_length;
+		glGetShaderiv(shader_object_id, GL_INFO_LOG_LENGTH, &log_length);
+		GLchar log_buffer[log_length];
+		glGetShaderInfoLog(shader_object_id, log_length, NULL, log_buffer);
 
-			DEBUG_LOG_WRITE_V(TAG, log_buffer);
-		}
+		DLOG() << std::string(log_buffer, log_length);
 	}
 
 	void log_program_info_log(GLuint program_object_id) {
-		if (LOGGING_ON) {
-			GLint log_length;
-			glGetProgramiv(program_object_id, GL_INFO_LOG_LENGTH, &log_length);
-			GLchar log_buffer[log_length];
-			glGetProgramInfoLog(program_object_id, log_length, NULL, log_buffer);
+		GLint log_length;
+		glGetProgramiv(program_object_id, GL_INFO_LOG_LENGTH, &log_length);
+		GLchar log_buffer[log_length];
+		glGetProgramInfoLog(program_object_id, log_length, NULL, log_buffer);
 
-			DEBUG_LOG_WRITE_V(TAG, log_buffer);
-		}
+		DLOG() << std::string(log_buffer, log_length);
 	}
 
 	GLuint compile_shader(const GLenum type, const GLchar* source, const GLint length) {
@@ -55,11 +37,11 @@ namespace GLHelpers
 	    glCompileShader(shader_object_id);
 	    glGetShaderiv(shader_object_id, GL_COMPILE_STATUS, &compile_status);
 
-	    if (LOGGING_ON) {
-	        DEBUG_LOG_WRITE_D(TAG, "Results of compiling shader source:");
-	        log_v_fixed_length(source, length);
-	        log_shader_info_log(shader_object_id);
-	    }
+
+		DLOG() << "Results of compiling shader source:"
+			   << std::string(source, length);
+		log_shader_info_log(shader_object_id);
+
 
 	    assert(compile_status != 0);
 
@@ -77,10 +59,8 @@ namespace GLHelpers
 	    glLinkProgram(program_object_id);
 	    glGetProgramiv(program_object_id, GL_LINK_STATUS, &link_status);
 
-	    if (LOGGING_ON) {
-	        DEBUG_LOG_WRITE_D(TAG, "Results of linking program:");
-	        log_program_info_log(program_object_id);
-	    }
+	    DLOG() << "Results of linking program:";
+	    log_program_info_log(program_object_id);
 
 	    assert(link_status != 0);
 
@@ -101,17 +81,16 @@ namespace GLHelpers
 	}
 
 	GLint validate_program(const GLuint program) {
-	    if (LOGGING_ON) {
+
 	        int validate_status;
 
 	        glValidateProgram(program);
 	        glGetProgramiv(program, GL_VALIDATE_STATUS, &validate_status);
-	        DEBUG_LOG_PRINT_D(TAG, "Results of validating program: %d", validate_status);
+	        DLOG() << "Results of validating program: "
+	        	   << validate_status;
 	        log_program_info_log(program);
 	        return validate_status;
-	    }
 
-	    return 0;
 	}
 }
 

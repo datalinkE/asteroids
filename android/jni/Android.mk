@@ -7,8 +7,8 @@ LOCAL_CFLAGS    := -Wall -Wextra
 LOCAL_SRC_FILES := ../../common/game.cpp \
 				   ../../common/buffer.cpp \
 				   ../../common/shader.cpp \
-				   platform_log.cpp \
 				   jni.cpp
 LOCAL_LDLIBS := -lGLESv2 -llog
+
 
 include $(BUILD_SHARED_LIBRARY)

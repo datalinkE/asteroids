@@ -18,7 +18,7 @@
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 				<configuration artifactName="${ProjName}" buildProperties="" description="" id="com.android.toolchain.gcc.345031080" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
 					<folderInfo id="com.android.toolchain.gcc.345031080.2133799467" name="/" resourcePath="">
-						<toolChain id="com.android.toolchain.gcc.1823227521" name="com.android.toolchain.gcc" superClass="com.android.toolchain.gcc">
+						<toolChain id="com.android.toolchain.gcc.1823227521" name="com.android.toolchain.gcc" resourceTypeBasedDiscovery="true" superClass="com.android.toolchain.gcc">
 							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF" id="com.android.targetPlatform.2140276518" isAbstract="false" superClass="com.android.targetPlatform"/>
 							<builder id="com.android.builder.608586062" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Android Builder" superClass="com.android.builder">
 								<outputEntries>
@@ -43,11 +43,14 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="MainActivity.null.981415318" name="MainActivity"/>
 	</storageModule>
+	<storageModule moduleId="refreshScope"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.android.toolchain.gcc.345031080">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.android.AndroidPerProjectProfile"/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="com.android.toolchain.gcc.345031080;com.android.toolchain.gcc.345031080.2133799467;com.android.gcc.compiler.905965558;com.android.gcc.inputType.1565818750">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.android.AndroidPerProjectProfile"/>
 		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="refreshScope"/>
 </cproject>

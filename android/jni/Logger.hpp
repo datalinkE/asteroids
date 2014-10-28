@@ -1,12 +1,4 @@
-/*
- * Logger.hpp
- *
- *  Created on: 22.04.2014
- *      Author: Enter
- */
-
-#ifndef LOGGER_HPP_
-#define LOGGER_HPP_
+#pragma once
 
 #include <android/log.h>
 #include <sstream>
@@ -48,4 +40,4 @@ namespace Util
 
 #define DLOG() Util::Logger(ANDROID_LOG_DEBUG, __func__)
 
-#endif /* LOGGER_HPP_ */
+#define CRASH(e) Util::Logger(ANDROID_LOG_DEBUG, #e); __builtin_trap()
