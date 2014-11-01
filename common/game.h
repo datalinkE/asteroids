@@ -1,4 +1,4 @@
-#include "platform_gl.h"
+#pragma once
 
 #if defined(__cplusplus)
 extern "C" {

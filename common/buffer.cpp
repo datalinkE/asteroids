@@ -1,9 +1,14 @@
 #include "GLHelpers.h"
 
+#include <assert.h>
+#include "Logger.hpp"
+
 namespace GLHelpers
 {
-	GLuint createVBO(const GLsizeiptr size, const GLvoid* data, const GLenum usage) {
-		assert(data != NULL);
+	GLuint createVBO(const GLsizeiptr size, const GLvoid* data, const GLenum usage)
+	{
+	    DLOG();
+	    assert(data != NULL);
 		GLuint vboObject;
 		glGenBuffers(1, &vboObject);
 		assert(vbo_object != 0);

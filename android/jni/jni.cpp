@@ -1,16 +1,23 @@
 #include <jni.h>
 #include "../../common/game.h"
+#include "../../common/Logger.hpp"
 
 
-JNIEXPORT void JNICALL jni_on_surface_created(JNIEnv * /*env*/, jclass /*cls*/) {
+JNIEXPORT void JNICALL jni_on_surface_created(JNIEnv * /*env*/, jclass /*cls*/)
+{
+    DLOG();
 	on_surface_created();
 }
 
-JNIEXPORT void JNICALL jni_on_surface_changed(JNIEnv * /*env*/, jclass /*cls*/, jint /*width*/, jint /*height*/) {
+JNIEXPORT void JNICALL jni_on_surface_changed(JNIEnv * /*env*/, jclass /*cls*/, jint /*width*/, jint /*height*/)
+{
+    DLOG();
 	on_surface_changed();
 }
 
-JNIEXPORT void JNICALL jni_on_draw_frame(JNIEnv * /*env*/, jclass /*cls*/) {
+JNIEXPORT void JNICALL jni_on_draw_frame(JNIEnv * /*env*/, jclass /*cls*/)
+{
+    DLOG();
 	on_draw_frame();
 }
 
@@ -25,14 +32,17 @@ static JNINativeMethod methodTable[] = {
  */
 jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/)
 {
+    DLOG();
 	JNIEnv* env;
-	if (vm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
+	if (vm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK)
+	{
+	    DLOG() << "Can't get JNIEnv!";
 		return -1;
 	}
 
 	env->RegisterNatives(env->FindClass("com/datalink/asteroids/GameLibJNIWrapper"),
-							methodTable,
-							sizeof(methodTable) / sizeof(methodTable[0]));
+                        methodTable,
+                        sizeof(methodTable) / sizeof(methodTable[0]));
 
 	return JNI_VERSION_1_6;
 }
