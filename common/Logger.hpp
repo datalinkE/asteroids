@@ -41,3 +41,5 @@ namespace Util
 #define DLOG() Util::Logger(LOG_LEVEL_DEBUG, __func__)
 
 #define CRASH(e) Util::Logger(LOG_LEVEL_DEBUG, #e); __builtin_trap()
+
+#define ARG(variable) #variable << "=" << variable

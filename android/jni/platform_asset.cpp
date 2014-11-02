@@ -23,7 +23,7 @@ std::string get_asset_data(const char* relative_path)
     assert(relative_path != NULL);
     AAsset* asset = AAssetManager_open(asset_manager, relative_path, AASSET_MODE_STREAMING);
     assert(asset != NULL);
-    std::unique_ptr<AAsset, void(*)(AAsset*)> ttt(asset , release_asset_data);
+    ON_BLOCK_EXIT(release_asset_data, asset);
 
     return std::string(static_cast<const char*>(AAsset_getBuffer(asset)), AAsset_getLength(asset));
 }
