@@ -17,7 +17,7 @@ JNIEXPORT void JNICALL jni_on_surface_changed(JNIEnv * /*env*/, jclass /*cls*/, 
 
 JNIEXPORT void JNICALL jni_on_draw_frame(JNIEnv * /*env*/, jclass /*cls*/)
 {
-    DLOG();
+    //DLOG();
 	on_draw_frame();
 }
 

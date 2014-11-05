@@ -9,7 +9,7 @@ namespace GLHelpers
 {
 	std::string shader_info_log(GLuint shader_object_id)
 	{
-	    DLOG();
+	    DLOG() << ARG(shader_object_id);
 		GLint log_length;
 		glGetShaderiv(shader_object_id, GL_INFO_LOG_LENGTH, &log_length);
 		GLchar log_buffer[log_length];
@@ -20,7 +20,7 @@ namespace GLHelpers
 
 	std::string program_info_log(GLuint program_object_id)
 	{
-	    DLOG();
+	    DLOG() << ARG(program_object_id);
 		GLint log_length;
 		glGetProgramiv(program_object_id, GL_INFO_LOG_LENGTH, &log_length);
 		GLchar log_buffer[log_length];
@@ -42,9 +42,9 @@ namespace GLHelpers
 	    glCompileShader(shader_object_id);
 	    glGetShaderiv(shader_object_id, GL_COMPILE_STATUS, &compile_status);
 
-		DLOG() << "Results of compiling shader source:"
-			   << std::string(source, length)
-		       << shader_info_log(shader_object_id);
+		DLOG() << "Results of compiling shader source:" << std::endl
+			   << std::string(source, length) << std::endl
+		       << ARG(shader_info_log(shader_object_id));
 
 	    assert(compile_status != 0);
 
@@ -64,8 +64,8 @@ namespace GLHelpers
 	    glLinkProgram(program_object_id);
 	    glGetProgramiv(program_object_id, GL_LINK_STATUS, &link_status);
 
-	    DLOG() << "Results of linking program:"
-	           << program_info_log(program_object_id);
+	    DLOG() << "Results of linking program:" << std::endl
+	           << ARG(program_info_log(program_object_id));
 
 	    assert(link_status != 0);
 
@@ -94,9 +94,9 @@ namespace GLHelpers
         glValidateProgram(program);
         glGetProgramiv(program, GL_VALIDATE_STATUS, &validate_status);
 
-        DLOG() << "Results of validating program:"
-               << validate_status
-               << program_info_log(program);
+        DLOG() << "Results of validating program:" << std::endl
+               << ARG(validate_status) << std::endl
+               << ARG(program_info_log(program));
 
         return validate_status;
 	}

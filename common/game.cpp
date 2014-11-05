@@ -32,7 +32,7 @@ void on_surface_changed()
 
 void on_draw_frame()
 {
-	DLOG();
+	//DLOG();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glUseProgram(program);
