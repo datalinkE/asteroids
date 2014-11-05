@@ -1,10 +1,10 @@
+#pragma once
+
 #include "platform_gl.h"
-#include <assert.h>
-#include <stdlib.h>
 
 namespace GLHelpers
 {
-	#define BUFFER_OFFSET(i) ((void*)(i))
+	//#define BUFFER_OFFSET(i) ((void*)(i))
 
 	GLuint createVBO(const GLsizeiptr size, const GLvoid* data, const GLenum usage);
 
