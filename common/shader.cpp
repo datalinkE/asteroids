@@ -3,6 +3,7 @@
 #include <string>
 #include <assert.h>
 #include "Logger.hpp"
+#include "platform_asset.h"
 
 namespace GLHelpers
 {
@@ -98,6 +99,21 @@ namespace GLHelpers
                << program_info_log(program);
 
         return validate_status;
+	}
+
+	GLuint build_program_from_assets(const char* vertex_shader_path, const char* fragment_shader_path)
+	{
+		DLOG();
+	    assert(vertex_shader_path != NULL);
+	    assert(fragment_shader_path != NULL);
+
+	    const std::string vertex_shader_source = get_asset_data(vertex_shader_path);
+	    const std::string fragment_shader_source = get_asset_data(fragment_shader_path);
+	    const GLuint program_object_id = build_program(
+	        vertex_shader_source.data(), vertex_shader_source.length(),
+	        fragment_shader_source.data(), fragment_shader_source.length());
+
+	    return program_object_id;
 	}
 }
 

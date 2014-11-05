@@ -11,7 +11,7 @@ namespace GLHelpers
 	    assert(data != NULL);
 		GLuint vboObject;
 		glGenBuffers(1, &vboObject);
-		assert(vbo_object != 0);
+		assert(vboObject != 0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vboObject);
 		glBufferData(GL_ARRAY_BUFFER, size, data, usage);

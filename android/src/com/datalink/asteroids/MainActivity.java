@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
         	glSurfaceView = new GLSurfaceView(this);
         	glSurfaceView.setEGLContextClientVersion(2);
         	glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0); // TODO: find out optimal value
-            glSurfaceView.setRenderer(new RendererWrapper());
+            glSurfaceView.setRenderer(new RendererWrapper(this));
             rendererSet = true;                        
             setContentView(glSurfaceView);
         } else {
