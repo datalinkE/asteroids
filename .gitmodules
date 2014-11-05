@@ -1,0 +1,6 @@
+[submodule "3dparty/libpng"]
+	path = 3dparty/libpng
+	url = git://git.code.sf.net/p/libpng/code
+[submodule "3dparty/glm"]
+	path = 3dparty/glm
+	url = https://github.com/g-truc/glm.git
