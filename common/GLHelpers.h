@@ -10,4 +10,6 @@ namespace GLHelpers
 
 	/* Should be called just before using a program to draw, if validation is needed. */
 	GLint validate_program(const GLuint program);
+
+	GLuint load_png_asset_into_texture(const char* relative_path);
 }

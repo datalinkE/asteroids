@@ -1,8 +1,8 @@
 #include <android/asset_manager_jni.h>
 #include <assert.h>
 #include "platform_asset.h"
-#include "../../common/ScopeGuard.hpp"
-#include "../../common/Logger.hpp"
+#include "ScopeGuard.hpp"
+#include "Logger.hpp"
 
 static AAssetManager* asset_manager = NULL;
 

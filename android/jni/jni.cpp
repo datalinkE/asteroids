@@ -1,6 +1,6 @@
 #include <jni.h>
-#include "../../common/game.h"
-#include "../../common/Logger.hpp"
+#include "game.h"
+#include "Logger.hpp"
 
 
 JNIEXPORT void JNICALL jni_on_surface_created(JNIEnv * /*env*/, jclass /*cls*/)
