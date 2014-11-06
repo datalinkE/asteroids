@@ -5,11 +5,11 @@
 class ShaderProgramTexture : public ShaderProgram
 {
 public:
-	ShaderProgramTexture(glm::mat4 &viewMatrix, glm::mat4 &projectonMatrix, GLuint textureHandle);
+	ShaderProgramTexture(glm::mat4 *viewMatrix, glm::mat4 *projectonMatrix, GLuint textureHandle);
 
 	virtual ~ShaderProgramTexture();
 
-	virtual void draw(glm::mat4 &modelMatrix, GLuint vbo);
+	virtual void draw(glm::mat4 *modelMatrix, GLuint vbo);
 
 protected:
 	GLuint mTextureHandle;

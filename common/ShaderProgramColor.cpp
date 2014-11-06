@@ -3,14 +3,15 @@
 using namespace glm;
 using namespace GLHelpers;
 
-ShaderProgramColor::ShaderProgramColor(mat4 &viewMatrix, mat4 &projectionMatrix, vec4 color)
+ShaderProgramColor::ShaderProgramColor(mat4 *viewMatrix, mat4 *projectionMatrix, vec4 color)
 	: ShaderProgram(viewMatrix, projectionMatrix)
 	, mColor(color)
 {
 	DLOG();
-	mProgramHandle = build_program_from_assets("BasicSolidColor.vsh", "BasicSolidColor.fsh");
+	mProgramHandle = build_program_from_assets("SolidColor.vsh", "SolidColor.fsh");
 	ma_PositionHandle = glGetAttribLocation(mProgramHandle, "a_Position");
 	mu_ColorHandle = glGetUniformLocation(mProgramHandle, "u_Color");
+	mu_MVPMatrixHandle = glGetUniformLocation(mProgramHandle, "u_MVPMatrix");
 }
 
 ShaderProgramColor::~ShaderProgramColor()
@@ -18,9 +19,12 @@ ShaderProgramColor::~ShaderProgramColor()
 	DLOG();
 }
 
-void ShaderProgramColor::draw(mat4 &modelMatrix, GLuint vbo)
+void ShaderProgramColor::draw(mat4 *modelMatrix, GLuint vbo)
 {
 	glUseProgram(mProgramHandle);
+
+	mat4 MVPMatrix = (*mProjectionMatrix) * (*mViewMatrix) * (*modelMatrix);
+	glUniformMatrix4fv(mu_MVPMatrixHandle, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
 
 	glUniform4fv(mu_ColorHandle, 1,glm::value_ptr(mColor));
 

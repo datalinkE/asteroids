@@ -8,7 +8,7 @@
 class ShaderProgram
 {
 public:
-	ShaderProgram(glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
+	ShaderProgram(glm::mat4 *viewMatrix, glm::mat4 *projectionMatrix)
 		: mViewMatrix(viewMatrix)
 		, mProjectionMatrix(projectionMatrix)
 		, mProgramHandle(0)
@@ -21,12 +21,12 @@ public:
 		DLOG() << ARG(mProgramHandle);
 	}
 
-	virtual void draw(glm::mat4 &modelMatrix, GLuint vbo) = 0;
+	virtual void draw(glm::mat4 *modelMatrix, GLuint vbo) = 0;
 
 protected:
-	glm::mat4 &mViewMatrix;
-	glm::mat4 &mProjectionMatrix;
-	glm::mat4 mMVPMatrix;
+	glm::mat4 *mViewMatrix;
+	glm::mat4 *mProjectionMatrix;
 	GLuint mProgramHandle;
 	GLuint ma_PositionHandle;
+	GLuint mu_MVPMatrixHandle;
 };

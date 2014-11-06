@@ -9,10 +9,10 @@ JNIEXPORT void JNICALL jni_on_surface_created(JNIEnv * /*env*/, jclass /*cls*/)
 	on_surface_created();
 }
 
-JNIEXPORT void JNICALL jni_on_surface_changed(JNIEnv * /*env*/, jclass /*cls*/, jint /*width*/, jint /*height*/)
+JNIEXPORT void JNICALL jni_on_surface_changed(JNIEnv * /*env*/, jclass /*cls*/, jint width, jint height)
 {
     DLOG();
-	on_surface_changed();
+	on_surface_changed(width, height);
 }
 
 JNIEXPORT void JNICALL jni_on_draw_frame(JNIEnv * /*env*/, jclass /*cls*/)
