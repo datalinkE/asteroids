@@ -1,4 +1,4 @@
-#include "image.h"
+#include "RawImageData.h"
 
 #include <assert.h>
 #include <png.h>

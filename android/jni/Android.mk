@@ -32,17 +32,22 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := game
 LOCAL_CFLAGS    := -Wall -Wextra -std=c++11
+LOCAL_CFLAGS 	+= -D__GXX_EXPERIMENTAL_CXX0X__
 				   
 LOCAL_SRC_FILES := $(GAME_RELATIVE_PATH)/game.cpp \
-				   $(GAME_RELATIVE_PATH)/buffer.cpp \
-				   $(GAME_RELATIVE_PATH)/shader.cpp \
-                   $(GAME_RELATIVE_PATH)/image.cpp \
-				   $(GAME_RELATIVE_PATH)/texture.cpp \
+				   $(GAME_RELATIVE_PATH)/RawImageData.cpp \
+				   $(GAME_RELATIVE_PATH)/GLHelpersBuffer.cpp \
+				   $(GAME_RELATIVE_PATH)/GLHelpersShader.cpp \
+                   $(GAME_RELATIVE_PATH)/GLHelpersTexture.cpp \
+                   $(GAME_RELATIVE_PATH)/ShaderProgramColor.cpp \
+                   $(GAME_RELATIVE_PATH)/ShaderProgramTexture.cpp \
 				   jni.cpp \
 				   platform_asset.cpp
 				   
 LOCAL_C_INCLUDES := $(PROJECT_ROOT)/common \
+					$(PROJECT_ROOT)/3dparty/glm \
 					$(PROJECT_ROOT)/3dparty/libpng
+					
 
 LOCAL_LDLIBS := -lGLESv2 -llog -landroid -lz
 

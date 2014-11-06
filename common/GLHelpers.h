@@ -13,3 +13,5 @@ namespace GLHelpers
 
 	GLuint load_png_asset_into_texture(const char* relative_path);
 }
+
+#define BUFFER_OFFSET(i) ((void*)(i))

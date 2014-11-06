@@ -1,7 +1,7 @@
 #include <assert.h>
 #include "GLHelpers.h"
 #include "Logger.hpp"
-#include "image.h"
+#include "RawImageData.h"
 #include "platform_asset.h"
 
 namespace GLHelpers
