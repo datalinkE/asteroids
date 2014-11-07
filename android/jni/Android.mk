@@ -41,6 +41,7 @@ LOCAL_SRC_FILES := $(GAME_RELATIVE_PATH)/game.cpp \
                    $(GAME_RELATIVE_PATH)/GLHelpersTexture.cpp \
                    $(GAME_RELATIVE_PATH)/ShaderProgramColor.cpp \
                    $(GAME_RELATIVE_PATH)/ShaderProgramTexture.cpp \
+				   $(GAME_RELATIVE_PATH)/Touch.cpp \
 				   jni.cpp \
 				   platform_asset.cpp
 				   

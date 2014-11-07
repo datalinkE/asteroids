@@ -8,11 +8,11 @@ static AAssetManager* asset_manager = NULL;
 
 extern "C"
 {
-JNIEXPORT void JNICALL Java_com_datalink_asteroids_AssetManagerJNIProvider_init_1asset_1manager(
+JNIEXPORT void JNICALL Java_com_datalink_asteroids_RendererWrapper_init_1asset_1manager(
     JNIEnv * env, jclass /*jclazz*/, jobject java_asset_manager);
 }
 
-JNIEXPORT void JNICALL Java_com_datalink_asteroids_AssetManagerJNIProvider_init_1asset_1manager(
+JNIEXPORT void JNICALL Java_com_datalink_asteroids_RendererWrapper_init_1asset_1manager(
     JNIEnv * env, jclass /*jclazz*/, jobject java_asset_manager)
 {
 	DLOG();

@@ -2,30 +2,41 @@
 
 #include <memory>
 #include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Logger.hpp"
 #include "GLHelpers.h"
 #include "ShaderProgramColor.h"
 #include "ShaderProgramTexture.h"
+#include "Touch.h"
 
 using namespace glm;
+using namespace Geometry;
 
-static GLuint buffer;
-static GLuint texture;
+GLuint buffer;
+GLuint texture;
 
 mat4 modelMatrix;
 mat4 viewMatrix;
 mat4 projectionMatrix;
 
+mat4 inverseViewProjectionMatrix;
+
 std::unique_ptr<ShaderProgram> shaderProgramColor;
 std::unique_ptr<ShaderProgram> shaderProgramTexture;
 
 // position X, Y, texture S, T
-static const float rect[] = {-0.5f, -0.5f, 0.0f, 0.0f,
-                             -0.5f,  0.5f, 0.0f, 1.0f,
-                              0.5f, -0.5f, 1.0f, 0.0f,
-                              0.5f,  0.5f, 1.0f, 1.0f};
+const float rect[] = {-0.5f, -0.5f, 0.0f, 0.0f,
+					 -0.5f,  0.5f, 0.0f, 1.0f,
+					  0.5f, -0.5f, 1.0f, 0.0f,
+					  0.5f,  0.5f, 1.0f, 1.0f};
+
+Geometry::Plane drawPlane =
+{
+	vec3(0.0f, 0.0f, 0.0f), //point
+	vec3(0.0f, 0.0f, 1.0f)	//normal
+};
 
 void on_surface_created()
 {
@@ -41,6 +52,8 @@ void on_surface_changed(int width, int height)
 			vec3(0.0f, 1.0f, 0.0f)); //top
 
 	projectionMatrix = perspective(45.0f, static_cast<float>(width) / height, 0.1f, 100.0f);
+
+	inverseViewProjectionMatrix = inverse(projectionMatrix * viewMatrix);
 
     buffer = GLHelpers::createVBO(sizeof(rect), rect, GL_STATIC_DRAW);
     texture = GLHelpers::load_png_asset_into_texture("stone.png");
@@ -58,4 +71,16 @@ void on_draw_frame()
 
     modelMatrix = translate(vec3(1.0f, 0.0f, 0.0f));
     shaderProgramTexture->draw(&modelMatrix, buffer);
+}
+
+void on_touch_press(float normalized_x, float normalized_y)
+{
+	DLOG() << ARG(normalized_x) << ARG(normalized_y);
+	Touch touch(normalized_x, normalized_y, &inverseViewProjectionMatrix);
+	DLOG() << to_string(touch.atPlane(drawPlane));
+}
+
+void on_touch_drag(float normalized_x, float normalized_y)
+{
+	DLOG() << ARG(normalized_x) << ARG(normalized_y);
 }

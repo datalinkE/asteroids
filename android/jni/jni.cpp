@@ -21,10 +21,24 @@ JNIEXPORT void JNICALL jni_on_draw_frame(JNIEnv * /*env*/, jclass /*cls*/)
 	on_draw_frame();
 }
 
+JNIEXPORT void JNICALL jni_on_touch_press(JNIEnv * /*env*/, jclass /*cls*/, jfloat normalized_x, jfloat normalized_y)
+{
+    DLOG();
+	on_touch_press(normalized_x, normalized_y);
+}
+
+JNIEXPORT void JNICALL jni_on_touch_drag(JNIEnv * /*env*/, jclass /*cls*/, jfloat normalized_x, jfloat normalized_y)
+{
+    DLOG();
+	on_touch_drag(normalized_x, normalized_y);
+}
+
 static JNINativeMethod methodTable[] = {
   {"on_surface_created", "()V", (void *) jni_on_surface_created},
   {"on_surface_changed", "(II)V", (void *) jni_on_surface_changed},
   {"on_draw_frame", "()V", (void *) jni_on_draw_frame},
+  {"on_touch_press", "(FF)V", (void *) jni_on_touch_press},
+  {"on_touch_drag", "(FF)V", (void *) jni_on_touch_drag},
 };
 
 /* Note: Alternative to using JNI_OnLoad is to use methods names defined like this:
@@ -40,7 +54,7 @@ jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/)
 		return -1;
 	}
 
-	env->RegisterNatives(env->FindClass("com/datalink/asteroids/GameLibJNIWrapper"),
+	env->RegisterNatives(env->FindClass("com/datalink/asteroids/RendererWrapper"),
                         methodTable,
                         sizeof(methodTable) / sizeof(methodTable[0]));
 
