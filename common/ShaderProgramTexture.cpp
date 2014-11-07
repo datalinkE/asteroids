@@ -20,9 +20,11 @@ ShaderProgramTexture::~ShaderProgramTexture()
 	DLOG();
 }
 
-void ShaderProgramTexture::draw(mat4 *modelMatrix, GLuint vbo)
+void ShaderProgramTexture::draw(mat4 *modelMatrix, GLuint vbo, GLuint drawMode)
 {
 		glUseProgram(mProgramHandle);
+
+		int vertexDataSize = 4 * sizeof(GL_FLOAT);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, mTextureHandle);
@@ -33,13 +35,16 @@ void ShaderProgramTexture::draw(mat4 *modelMatrix, GLuint vbo)
 		glUniform1i(mu_TextureUnitHandle, 0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glVertexAttribPointer(ma_PositionHandle, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), BUFFER_OFFSET(0));
+		int vboSize = 0;
+		glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &vboSize);
+
+		glVertexAttribPointer(ma_PositionHandle, 2, GL_FLOAT, GL_FALSE, vertexDataSize, BUFFER_OFFSET(0));
 	    glEnableVertexAttribArray(ma_PositionHandle);
 
-		glVertexAttribPointer(ma_TextureCoordinatesHandle, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), BUFFER_OFFSET(2 * sizeof(GL_FLOAT)));
+		glVertexAttribPointer(ma_TextureCoordinatesHandle, 2, GL_FLOAT, GL_FALSE, vertexDataSize, BUFFER_OFFSET(2 * sizeof(GL_FLOAT)));
 		glEnableVertexAttribArray(ma_TextureCoordinatesHandle);
 
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		glDrawArrays(drawMode, 0, vboSize / vertexDataSize);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

@@ -9,7 +9,7 @@ public:
 
 	virtual ~ShaderProgramColor();
 
-	virtual void draw(glm::mat4 *modelMatrix, GLuint vbo);
+	virtual void draw(glm::mat4 *modelMatrix, GLuint vbo, GLuint drawMode);
 
 protected:
 	glm::vec4 mColor;

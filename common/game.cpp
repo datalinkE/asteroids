@@ -32,7 +32,9 @@ const float rect[] = {-0.5f, -0.5f, 0.0f, 0.0f,
 					  0.5f, -0.5f, 1.0f, 0.0f,
 					  0.5f,  0.5f, 1.0f, 1.0f};
 
-Geometry::Plane drawPlane =
+GLuint circleVBO;
+
+Plane drawPlane =
 {
 	vec3(0.0f, 0.0f, 0.0f), //point
 	vec3(0.0f, 0.0f, 1.0f)	//normal
@@ -59,12 +61,21 @@ void on_surface_changed(int width, int height)
     texture = GLHelpers::load_png_asset_into_texture("stone.png");
     shaderProgramColor.reset(new ShaderProgramColor(&viewMatrix, &projectionMatrix, vec4(0.0f, 0.0f, 1.0f, 1.0f)));
     shaderProgramTexture.reset(new ShaderProgramTexture(&viewMatrix, &projectionMatrix, texture));
+
+    int circlePoints = 50;
+    int circleBufferSize = size_of_circle_in_vertices(circlePoints) * 4;
+    float circleBuffer[circleBufferSize];
+    gen_circle(circleBuffer, 0.3f, circlePoints);
+    circleVBO = GLHelpers::createVBO(sizeof(circleBuffer), circleBuffer, GL_STATIC_DRAW);
 }
 
 void on_draw_frame()
 {
 	//DLOG();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    modelMatrix = translate(vec3(0.0f, 0.5f, 0.0f));
+    shaderProgramColor->draw(&modelMatrix, circleVBO, GL_TRIANGLE_FAN);
 
     modelMatrix = translate(vec3(-1.0f, 0.0f, -1.0f));
     shaderProgramColor->draw(&modelMatrix, buffer);

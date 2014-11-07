@@ -17,6 +17,7 @@ namespace GLHelpers
 		glBufferData(GL_ARRAY_BUFFER, size, data, usage);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+		DLOG() << ARG(vboObject) << ARG(size);
 		return vboObject;
 	}
 }

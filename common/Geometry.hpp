@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "Logger.hpp"
 
 namespace Geometry
 {
@@ -32,5 +33,40 @@ namespace Geometry
 		//it could mean parallel line or line at plane
 
 		return line.point + t * line.vector;
+	}
+
+	inline int size_of_circle_in_vertices(int num_points)
+	{
+	    return 1 + (num_points + 1);
+	}
+
+	inline void gen_circle(float* out, float radius, int num_points)
+	{
+		int offset = 0;
+	    out[offset++] = 0.0f; //center_x;
+	    out[offset++] = 0.0f; //center_y;
+
+	    //TODO:
+	    out[offset++] = 0.0f; //texture1;
+	    out[offset++] = 0.0f; //texture2;
+
+	    int i;
+	    for (i = 0; i <= num_points; i++)
+	    {
+	        float angle_in_radians = ((float) i / (float) num_points)
+	                               * ((float) M_PI * 2.0f);
+	        out[offset++] = radius * cos(angle_in_radians);
+	        out[offset++] = radius * sin(angle_in_radians);
+
+		    //TODO:
+		    out[offset++] = 0.0f; //texture1;
+		    out[offset++] = 0.0f; //texture2;
+	    }
+
+	    for (i = 0; i <= num_points + 1; i++)
+	    {
+	    	int j = i*4;
+	    	DLOG() << out[j] << out[j+1] << out[j+2] << out[j+3];
+	    }
 	}
 }

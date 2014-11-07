@@ -21,7 +21,7 @@ public:
 		DLOG() << ARG(mProgramHandle);
 	}
 
-	virtual void draw(glm::mat4 *modelMatrix, GLuint vbo) = 0;
+	virtual void draw(glm::mat4 *modelMatrix, GLuint vbo, GLuint drawMode = GL_TRIANGLE_STRIP) = 0;
 
 protected:
 	glm::mat4 *mViewMatrix;

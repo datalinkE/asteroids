@@ -19,9 +19,11 @@ ShaderProgramColor::~ShaderProgramColor()
 	DLOG();
 }
 
-void ShaderProgramColor::draw(mat4 *modelMatrix, GLuint vbo)
+void ShaderProgramColor::draw(mat4 *modelMatrix, GLuint vbo, GLuint drawMode)
 {
 	glUseProgram(mProgramHandle);
+
+	int vertexDataSize = 4 * sizeof(GL_FLOAT);
 
 	mat4 MVPMatrix = (*mProjectionMatrix) * (*mViewMatrix) * (*modelMatrix);
 	glUniformMatrix4fv(mu_MVPMatrixHandle, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
@@ -29,9 +31,13 @@ void ShaderProgramColor::draw(mat4 *modelMatrix, GLuint vbo)
 	glUniform4fv(mu_ColorHandle, 1,glm::value_ptr(mColor));
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glVertexAttribPointer(ma_PositionHandle, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), BUFFER_OFFSET(0));
+	int vboSize = 0;
+	glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &vboSize);
+
+	glVertexAttribPointer(ma_PositionHandle, 2, GL_FLOAT, GL_FALSE, vertexDataSize, BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(ma_PositionHandle);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	glDrawArrays(drawMode, 0, vboSize / vertexDataSize);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
