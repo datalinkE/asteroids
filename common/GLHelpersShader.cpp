@@ -10,34 +10,37 @@ namespace GLHelpers
 	std::string shader_info_log(GLuint shader_object_id)
 	{
 	    DLOG() << ARG(shader_object_id);
-		GLint log_length;
+		GLint log_length = 0;
+
 		glGetShaderiv(shader_object_id, GL_INFO_LOG_LENGTH, &log_length);
-
 		DLOG() << ARG(log_length);
-		if (!log_length)
-		{
-			return std::string();
-		}
 
-		GLchar log_buffer[log_length];
-		glGetShaderInfoLog(shader_object_id, log_length, NULL, log_buffer);
+//		if (!log_length)
+//		{
+//			return std::string();
+//		}
+
+        char log_buffer[100];
+		glGetShaderInfoLog(shader_object_id, 100, &log_length, (GLchar*)log_buffer);
+		DLOG() << ARG(log_length);
+
 		return std::string(log_buffer, log_length);
 	}
 
 	std::string program_info_log(GLuint program_object_id)
 	{
 	    DLOG() << ARG(program_object_id);
-		GLint log_length;
+		GLint log_length = 0;
 		glGetProgramiv(program_object_id, GL_INFO_LOG_LENGTH, &log_length);
-
 		DLOG() << ARG(log_length);
-		if (!log_length)
-		{
-			return std::string();
-		}
+//		if (!log_length)
+//		{
+//			return std::string();
+//		}
 
-		GLchar log_buffer[log_length];
-		glGetProgramInfoLog(program_object_id, log_length, NULL, log_buffer);
+		char log_buffer[100];
+		glGetProgramInfoLog(program_object_id, 100, &log_length, (GLchar*)log_buffer);
+		DLOG() << ARG(log_length);
 		return std::string(log_buffer, log_length);
 	}
 
@@ -55,11 +58,11 @@ namespace GLHelpers
 	    glGetShaderiv(shader_object_id, GL_COMPILE_STATUS, &compile_status);
 
 		DLOG() << "Results of compiling shader source:" << std::endl
-			   << std::string(source, length) << std::endl
+			   //<< std::string(source, length) << std::endl
 			   << ARG(compile_status)
 		       << ARG(shader_info_log(shader_object_id));
 
-	    assert(compile_status != 0);
+	    assert(compile_status == GL_TRUE);
 
 	    return shader_object_id;
 	}
@@ -81,8 +84,9 @@ namespace GLHelpers
 	    	   << ARG(link_status)
 	           << ARG(program_info_log(program_object_id));
 
-	    assert(link_status != 0);
+        assert(link_status == GL_TRUE);
 
+        DLOG() << "Success" << ARG(program_object_id);
 	    return program_object_id;
 	}
 
@@ -98,6 +102,8 @@ namespace GLHelpers
 	        GL_VERTEX_SHADER, vertex_shader_source, vertex_shader_source_length);
 	    GLuint fragment_shader = compile_shader(
 	        GL_FRAGMENT_SHADER, fragment_shader_source, fragment_shader_source_length);
+
+	    DLOG() << "Success" << ARG(vertex_shader) << ARG(fragment_shader);
 	    return link_program(vertex_shader, fragment_shader);
 	}
 
