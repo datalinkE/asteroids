@@ -14,7 +14,7 @@
 using namespace glm;
 using namespace Geometry;
 
-GLuint buffer;
+GLuint squreVBO;
 GLuint texture;
 
 mat4 modelMatrix;
@@ -48,25 +48,40 @@ void on_surface_created()
 void on_surface_changed(int width, int height)
 {
 	DLOG();
+	float aspectRatio = static_cast<float>(width) / height;
+
 	viewMatrix = lookAt(
 			vec3(0.0f, 0.0f, 3.0f),  //pos
 			vec3(0.0f, 0.0f, 0.0f),  //dir
-			vec3(0.0f, 1.0f, 0.0f)); //top
+			vec3(0.0f, 1.0f, 0.0f));  //top
 
 	projectionMatrix = perspective(45.0f, static_cast<float>(width) / height, 0.1f, 100.0f);
-
 	inverseViewProjectionMatrix = inverse(projectionMatrix * viewMatrix);
 
-    buffer = GLHelpers::createVBO(sizeof(rect), rect, GL_STATIC_DRAW);
-    texture = GLHelpers::load_png_asset_into_texture("stone.png");
-    shaderProgramColor.reset(new ShaderProgramColor(&viewMatrix, &projectionMatrix, vec4(0.0f, 0.0f, 1.0f, 1.0f)));
-    shaderProgramTexture.reset(new ShaderProgramTexture(&viewMatrix, &projectionMatrix, texture));
+	// game coordinates would be [-xMax .. xMax] and [-yMax .. yMax]
+	float xMax = 5.0f;
+	float yMax = xMax / aspectRatio;
+
+	// fitting x interval to the screen
+	// touching the leftmost border should result in xMax
+	vec3 unscaled = Touch(1.0f, 0.0f, &inverseViewProjectionMatrix).atPlane(drawPlane);
+	float scaleFactor = unscaled[0] / xMax;
+
+	mat4 scaleMatrix = scale(vec3(scaleFactor, scaleFactor, 1.0f));
+	viewMatrix = viewMatrix * scaleMatrix;
+    inverseViewProjectionMatrix = inverse(scaleMatrix) * inverseViewProjectionMatrix;
+
+    squreVBO = GLHelpers::createVBO(sizeof(rect), rect, GL_STATIC_DRAW);
 
     int circlePoints = 50;
     int circleBufferSize = size_of_circle_in_vertices(circlePoints) * 4;
     float circleBuffer[circleBufferSize];
     gen_circle(circleBuffer, 0.3f, circlePoints);
     circleVBO = GLHelpers::createVBO(sizeof(circleBuffer), circleBuffer, GL_STATIC_DRAW);
+
+    texture = GLHelpers::load_png_asset_into_texture("stone.png");
+    shaderProgramColor.reset(new ShaderProgramColor(&viewMatrix, &projectionMatrix, vec4(0.0f, 0.0f, 1.0f, 1.0f)));
+    shaderProgramTexture.reset(new ShaderProgramTexture(&viewMatrix, &projectionMatrix, texture));
 }
 
 void on_draw_frame()
@@ -78,10 +93,10 @@ void on_draw_frame()
     shaderProgramColor->draw(&modelMatrix, circleVBO, GL_TRIANGLE_FAN);
 
     modelMatrix = translate(vec3(-1.0f, 0.0f, -1.0f));
-    shaderProgramColor->draw(&modelMatrix, buffer);
+    shaderProgramColor->draw(&modelMatrix, squreVBO);
 
     modelMatrix = translate(vec3(1.0f, 0.0f, 0.0f));
-    shaderProgramTexture->draw(&modelMatrix, buffer);
+    shaderProgramTexture->draw(&modelMatrix, squreVBO);
 }
 
 void on_touch_press(float normalized_x, float normalized_y)

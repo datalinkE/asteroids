@@ -62,11 +62,5 @@ namespace Geometry
 		    out[offset++] = 0.0f; //texture1;
 		    out[offset++] = 0.0f; //texture2;
 	    }
-
-	    for (i = 0; i <= num_points + 1; i++)
-	    {
-	    	int j = i*4;
-	    	DLOG() << out[j] << out[j+1] << out[j+2] << out[j+3];
-	    }
 	}
 }
