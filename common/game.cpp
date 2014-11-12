@@ -23,8 +23,8 @@ mat4 projectionMatrix;
 
 mat4 inverseViewProjectionMatrix;
 
-std::unique_ptr<ShaderProgram> shaderProgramColor;
-std::unique_ptr<ShaderProgram> shaderProgramTexture;
+std::unique_ptr<ShaderProgramColor> shaderProgramColor;
+std::unique_ptr<ShaderProgramTexture> shaderProgramTexture;
 
 // position X, Y, texture S, T
 const float rect[] = {-0.5f, -0.5f, 0.0f, 0.0f,
@@ -80,8 +80,8 @@ void on_surface_changed(int width, int height)
     circleVBO = GLHelpers::createVBO(sizeof(circleBuffer), circleBuffer, GL_STATIC_DRAW);
 
     texture = GLHelpers::load_png_asset_into_texture("stone.png");
-    shaderProgramColor.reset(new ShaderProgramColor(&viewMatrix, &projectionMatrix, vec4(0.0f, 0.0f, 1.0f, 1.0f)));
-    shaderProgramTexture.reset(new ShaderProgramTexture(&viewMatrix, &projectionMatrix, texture));
+    shaderProgramColor.reset(new ShaderProgramColor(&viewMatrix, &projectionMatrix));
+    shaderProgramTexture.reset(new ShaderProgramTexture(&viewMatrix, &projectionMatrix));
 }
 
 void on_draw_frame()
@@ -90,13 +90,13 @@ void on_draw_frame()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     modelMatrix = translate(vec3(0.0f, 0.5f, 0.0f));
-    shaderProgramColor->draw(&modelMatrix, circleVBO, GL_TRIANGLE_FAN);
+    shaderProgramColor->draw(&modelMatrix, circleVBO, vec4(0.0f, 0.0f, 1.0f, 1.0f), GL_TRIANGLE_FAN);
 
     modelMatrix = translate(vec3(-1.0f, 0.0f, -1.0f));
-    shaderProgramColor->draw(&modelMatrix, squreVBO);
+    shaderProgramColor->draw(&modelMatrix, squreVBO, vec4(0.0f, 1.0f, 0.0f, 1.0f));
 
     modelMatrix = translate(vec3(1.0f, 0.0f, 0.0f));
-    shaderProgramTexture->draw(&modelMatrix, squreVBO);
+    shaderProgramTexture->draw(&modelMatrix, squreVBO, texture);
 }
 
 void on_touch_press(float normalized_x, float normalized_y)

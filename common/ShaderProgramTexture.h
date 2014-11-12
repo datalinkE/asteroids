@@ -5,14 +5,12 @@
 class ShaderProgramTexture : public ShaderProgram
 {
 public:
-	ShaderProgramTexture(glm::mat4 *viewMatrix, glm::mat4 *projectonMatrix, GLuint textureHandle);
+	ShaderProgramTexture(glm::mat4 *viewMatrix, glm::mat4 *projectonMatrix);
 
 	virtual ~ShaderProgramTexture();
 
-	virtual void draw(glm::mat4 *modelMatrix, GLuint vbo, GLuint drawMode);
+	void draw(glm::mat4 *modelMatrix, GLuint vbo, GLuint textureHandle, GLuint drawMode = GL_TRIANGLE_STRIP);
 
 protected:
 	GLuint mTextureHandle;
-	GLuint ma_TextureCoordinatesHandle;
-	GLuint mu_TextureUnitHandle;
 };

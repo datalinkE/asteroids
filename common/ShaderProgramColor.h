@@ -5,13 +5,12 @@
 class ShaderProgramColor : public ShaderProgram
 {
 public:
-	ShaderProgramColor(glm::mat4 *viewMatrix, glm::mat4 *projectonMatrix, glm::vec4 color);
+	ShaderProgramColor(glm::mat4 *viewMatrix, glm::mat4 *projectonMatrix);
 
 	virtual ~ShaderProgramColor();
 
-	virtual void draw(glm::mat4 *modelMatrix, GLuint vbo, GLuint drawMode);
+	void draw(glm::mat4 *modelMatrix, GLuint vbo, glm::vec4 color, GLuint drawMode = GL_TRIANGLE_STRIP);
 
 protected:
 	glm::vec4 mColor;
-	GLuint mu_ColorHandle;
 };
