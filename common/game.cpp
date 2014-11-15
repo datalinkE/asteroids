@@ -10,6 +10,7 @@
 #include "ShaderProgramColor.h"
 #include "ShaderProgramTexture.h"
 #include "Touch.h"
+#include "Timer.h"
 
 using namespace glm;
 using namespace Geometry;
@@ -40,9 +41,12 @@ Plane drawPlane =
 	vec3(0.0f, 0.0f, 1.0f)	//normal
 };
 
+Timer timer;
+
 void on_surface_created()
 {
 	DLOG();
+	timer.Start();
 }
 
 void on_surface_changed(int width, int height)
@@ -84,12 +88,17 @@ void on_surface_changed(int width, int height)
     shaderProgramTexture.reset(new ShaderProgramTexture(&viewMatrix, &projectionMatrix));
 }
 
+float pos = 0.0f;
+
 void on_draw_frame()
 {
-	//DLOG();
+    timer.Update();
+	DLOG() << ARG(timer.GetTimeSim());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    modelMatrix = translate(vec3(0.0f, 0.5f, 0.0f));
+    pos += timer.GetTimeSim() * 0.1f;
+    modelMatrix = translate(vec3(pos, 0.5f, 0.0f));
+    //modelMatrix = translate(vec3(0.0f, 0.5f, 0.0f));
     shaderProgramColor->draw(&modelMatrix, circleVBO, vec4(0.0f, 0.0f, 1.0f, 1.0f), GL_TRIANGLE_FAN);
 
     modelMatrix = translate(vec3(-1.0f, 0.0f, -1.0f));
