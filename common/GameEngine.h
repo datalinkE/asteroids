@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <list>
 #include <glm/glm.hpp>
 #include "ShaderProgramColor.h"
 #include "ShaderProgramTexture.h"
@@ -42,7 +43,7 @@ private:
     Geometry::Plane drawPlane;
     Timer timer;
 
-    std::unique_ptr<GameObject> mObject;
+    std::list<GameObjectPtr> mObjects;
 
     float mXMax;
     float mYMax;

@@ -74,12 +74,35 @@ void GameEngine::tick()
     timer.Update();
     //DLOG() << ARG(timer.GetTimeSim());
 
+    for (GameObjectPtr& object : mObjects)
+    {
+        object->move(timer.GetTimeSim());
+    }
+
+    for (GameObjectPtr& object : mObjects)
+    {
+        if(!object->isDeleted())
+        {
+            object->interfere();
+        }
+    }
+
+    for (auto it = mObjects.begin(); it != mObjects.end();)
+    {
+        if((*it)->isDeleted())
+        {
+            mObjects.erase(it++);
+            continue;
+        }
+
+        it++;
+    }
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (mObject)
+    for (GameObjectPtr& object : mObjects)
     {
-        mObject->move(timer.GetTimeSim());
-        mObject->draw();
+        object->draw();
     }
 
     modelMatrix = translate(vec3(-1.0f, 0.0f, -1.0f));
@@ -97,7 +120,7 @@ void GameEngine::input(float normalized_x, float normalized_y)
     vec3 posAtDrawPlane = touch.atPlane(drawPlane);
     DLOG() << to_string(posAtDrawPlane);
 
-    mObject.reset(new GameObject(this, posAtDrawPlane));
+    mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, posAtDrawPlane, 0.5f, 3.0f)));
 }
 
 

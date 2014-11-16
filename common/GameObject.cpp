@@ -8,10 +8,13 @@
 
 using namespace glm;
 
-GameObject::GameObject(GameEngine* gameEngine, vec3 position)
-    : mPosition(position)
-    , mVelocity(vec3(0.3f, 0.3f, 0.0f))
-    , mBoundingRadius(1.0f)
+GameObject::GameObject(GameEngine* gameEngine, vec3 position, float boundingRadius, float timeToLive, vec3 velocity)
+    : mDeleted(false)
+    , mTimeToLive(timeToLive)
+    , mTime(0.0f)
+    , mPosition(position)
+    , mVelocity(velocity)
+    , mBoundingRadius(boundingRadius)
     , mEngine(gameEngine)
 {
     DLOG();
@@ -24,12 +27,16 @@ GameObject::~GameObject()
 
 void GameObject::move(float timeDelta)
 {
+    mTime += timeDelta;
     mPosition += timeDelta * mVelocity;
 }
 
 void GameObject::interfere()
 {
-
+    if (mTimeToLive > 0 && mTime > mTimeToLive)
+    {
+        mDeleted = true;
+    }
 }
 
 void GameObject::draw()
