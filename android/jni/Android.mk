@@ -43,6 +43,8 @@ LOCAL_SRC_FILES := $(GAME_RELATIVE_PATH)/game.cpp \
                    $(GAME_RELATIVE_PATH)/ShaderProgramTexture.cpp \
 				   $(GAME_RELATIVE_PATH)/Touch.cpp \
 				   $(GAME_RELATIVE_PATH)/Timer.cpp \
+				   $(GAME_RELATIVE_PATH)/GameObject.cpp \
+				   $(GAME_RELATIVE_PATH)/GameEngine.cpp \
 				   jni.cpp \
 				   platform_asset.cpp
 				   
