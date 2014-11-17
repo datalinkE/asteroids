@@ -7,6 +7,8 @@
 #include "GLHelpers.h"
 #include "Touch.h"
 
+#include "QuadTree.h"
+
 using namespace glm;
 using namespace Geometry;
 

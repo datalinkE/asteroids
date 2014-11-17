@@ -40,4 +40,3 @@ protected:
 };
 
 typedef std::unique_ptr<GameObject> GameObjectPtr;
-

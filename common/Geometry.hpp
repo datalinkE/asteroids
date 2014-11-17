@@ -17,10 +17,16 @@ namespace Geometry
 		glm::vec3 normal;
 	};
 
-	struct Sphere
+	struct Circle
 	{
-		glm::vec3 center;
+		glm::vec2 center;
 		float radius;
+	};
+
+	struct Rect
+	{
+	    glm::vec2 leftBot;
+	    glm::vec2 rightTop;
 	};
 
 	inline glm::vec3 intersect(const Line& line, const Plane& plane)
