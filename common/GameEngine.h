@@ -8,6 +8,7 @@
 #include "Geometry.hpp"
 #include "Timer.h"
 #include "GameObject.h"
+#include "QuadTree.h"
 
 class GameEngine
 {
@@ -47,4 +48,6 @@ private:
 
     float mXMax;
     float mYMax;
+
+    std::unique_ptr<QuadTree> mCollidables;
 };

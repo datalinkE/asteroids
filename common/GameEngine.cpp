@@ -7,8 +7,6 @@
 #include "GLHelpers.h"
 #include "Touch.h"
 
-#include "QuadTree.h"
-
 using namespace glm;
 using namespace Geometry;
 
@@ -32,7 +30,7 @@ GameEngine::GameEngine()
     int circlePoints = 50;
     int circleBufferSize = size_of_circle_in_vertices(circlePoints) * 4;
     float circleBuffer[circleBufferSize];
-    gen_circle(circleBuffer, 0.3f, circlePoints);
+    gen_circle(circleBuffer, 0.5f, circlePoints);
     circleVBO = GLHelpers::createVBO(sizeof(circleBuffer), circleBuffer, GL_STATIC_DRAW);
 
     texture = GLHelpers::load_png_asset_into_texture("stone.png");
@@ -52,6 +50,8 @@ void GameEngine::setGameField(int width, int height)
     // game coordinates would be [-xMax .. xMax] and [-yMax .. yMax]
     mXMax = 5.0f;
     mYMax = mXMax / aspectRatio;
+
+    mCollidables.reset(new QuadTree(0, Geometry::Rect {vec2(-mXMax, -mYMax), vec2(mXMax, mYMax)}));
 
     viewMatrix = lookAt(
             vec3(0.0f, 0.0f, 3.0f),  //pos
@@ -74,11 +74,16 @@ void GameEngine::setGameField(int width, int height)
 void GameEngine::tick()
 {
     timer.Update();
-    //DLOG() << ARG(timer.GetTimeSim());
+    mCollidables->clear();
 
     for (GameObjectPtr& object : mObjects)
     {
         object->move(timer.GetTimeSim());
+
+        if(!object->isDeleted())
+        {
+            mCollidables->insert(object.get());
+        }
     }
 
     for (GameObjectPtr& object : mObjects)
@@ -107,11 +112,11 @@ void GameEngine::tick()
         object->draw();
     }
 
-    modelMatrix = translate(vec3(-1.0f, 0.0f, -1.0f));
-    shaderProgramColor->draw(&modelMatrix, squreVBO, vec4(0.0f, 1.0f, 0.0f, 1.0f));
-
-    modelMatrix = translate(vec3(1.0f, 0.0f, 0.0f));
-    shaderProgramTexture->draw(&modelMatrix, squreVBO, texture);
+//    modelMatrix = translate(vec3(-1.0f, 0.0f, -1.0f));
+//    shaderProgramColor->draw(&modelMatrix, squreVBO, vec4(0.0f, 1.0f, 0.0f, 1.0f));
+//
+//    modelMatrix = translate(vec3(1.0f, 0.0f, 0.0f));
+//    shaderProgramTexture->draw(&modelMatrix, squreVBO, texture);
 }
 
 void GameEngine::input(float normalized_x, float normalized_y)
@@ -122,7 +127,7 @@ void GameEngine::input(float normalized_x, float normalized_y)
     vec3 posAtDrawPlane = touch.atPlane(drawPlane);
     DLOG() << to_string(posAtDrawPlane);
 
-    mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, posAtDrawPlane, 0.5f, 3.0f)));
+    mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, posAtDrawPlane, 0.5f, 5.0f)));
 }
 
 

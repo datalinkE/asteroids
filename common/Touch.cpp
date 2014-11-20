@@ -18,7 +18,7 @@ Touch::Touch(float normalized_x, float normalized_y, mat4 *inverted_view_project
 	// line between them. To do this transform, we need to first multiply by
 	// the inverse matrix, and then we need to undo the perspective divide.
 	vec4 near_point_ndc(normalized_x, normalized_y, 0.0f, 1);
-	vec4 far_point_ndc(normalized_x, normalized_y,  -10.0f, 1);
+	vec4 far_point_ndc(normalized_x, normalized_y,  -100.0f, 1);
 
 	vec4 near_point_world = (*inverted_view_projection_matrix) * near_point_ndc;
 	vec4 far_point_world =  (*inverted_view_projection_matrix) * far_point_ndc;

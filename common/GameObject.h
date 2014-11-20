@@ -20,13 +20,29 @@ public:
     virtual void interfere();
     virtual void draw();
 
-    bool isDeleted()
+    const glm::vec3& position() const
+    {
+        return mPosition;
+    }
+
+    float boundingRadius() const
+    {
+        return mBoundingRadius;
+    }
+
+    bool isDeleted() const
     {
         return mDeleted;
     }
 
+    bool interferedThisTick() const
+    {
+        return mInterfered;
+    }
+
 protected:
     bool mDeleted;
+    bool mInterfered;
     float mTimeToLive;
     float mTime;
 
@@ -37,6 +53,8 @@ protected:
     glm::mat4 mModelMatrix;
 
     GameEngine* mEngine;
+
+    glm::vec4 mColor;
 };
 
 typedef std::unique_ptr<GameObject> GameObjectPtr;

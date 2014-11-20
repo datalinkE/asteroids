@@ -33,28 +33,80 @@ public:
         }
     }
 
+    enum { TOP_RIGHT = 0, TOP_LEFT = 1, BOT_LEFT = 2, BOT_RIGHT = 4, NOT_FIT = -1, OUT_OF_BOUNDS = -2};
+
     virtual ~QuadTree()
     {
     }
 
-    void split()
-    {
-
-    }
-
     int getIndex(GameObject* obj)
     {
-        return -1;
+        const glm::vec3& pos = obj->position();
+        float r = obj->boundingRadius();
+
+        glm::vec2 center = 0.5f * (mBounds.leftBot + mBounds.rightTop);
+
+        bool itersectsX = std::abs(pos[0] - center[0]) < r;
+        bool itersectsY = std::abs(pos[1] - center[1]) < r;
+
+        if (itersectsX || itersectsY)
+        {
+            return NOT_FIT;
+        }
+
+        float distLeft = pos[0] - mBounds.leftBot[0];
+        float distBot = pos[1] - mBounds.leftBot[1];
+        float distRight = mBounds.rightTop[0] - pos[0];
+        float distTop = mBounds.rightTop[1] - pos[1];
+
+        if (distLeft < r ||
+            distBot < r ||
+            distRight < r ||
+            distTop < r )
+        {
+            return NOT_FIT;
+        }
+
+        if (distLeft < 0 ||
+            distBot < 0 ||
+            distRight < 0 ||
+            distTop < 0 )
+        {
+            return OUT_OF_BOUNDS;
+        }
+
+        int inLeftQuadrant = pos[0] < center[0];
+        int inBotQuadrant = pos[1] < center[1];
+        int posIndex = inLeftQuadrant + (1 << inBotQuadrant);
+
+        return posIndex;
     }
 
     void insert(GameObject* obj)
     {
-
+        if (mNodes[0])
+        {
+            int index = getIndex(obj);
+            if (index != -1)
+            {
+                mNodes[index]->insert(obj);
+                return;
+            }
+        }
+        mObjects.push_back(obj);
     }
 
     GameObjectList retrieve(GameObject* obj)
     {
-        return GameObjectList();
+        GameObjectList returnObjects;
+
+        int index = getIndex(obj);
+        if (index != -1)
+        {
+            returnObjects.splice(returnObjects.end(), mNodes[index]->retrieve(obj));
+        }
+        returnObjects.insert(returnObjects.end(), mObjects.begin(), mObjects.end());
+        return returnObjects;
     }
 
     void clear()
@@ -76,15 +128,12 @@ public:
 
 
 private:
-    static const int MAX_OBJECTS = 10;
     static const int MAX_LEVELS = 5;
     static const int NODES_COUNT = 4;
 
     int mLevel;
     GameObjectList mObjects;
     Geometry::Rect mBounds;
-
-    GameObjectList mOutOfBoundsObjects; // level 0 only!
 
     QuadTreePtr mNodes[NODES_COUNT];
 };
