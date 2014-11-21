@@ -3,10 +3,9 @@ PROJECT_ROOT = $(LOCAL_PATH)/../../
 
 GAME_RELATIVE_PATH := ../../common
 LIBPNG_RELATIVE_PATH := ../../3dparty/libpng
+FREETYPE_RELATIVE_PATH := ../../3dparty/freetype2
 
 include $(CLEAR_VARS)
-
-LOCAL_CFLAGS := 
 
 LOCAL_MODULE := libpng
 
@@ -25,6 +24,46 @@ LOCAL_SRC_FILES := $(LIBPNG_RELATIVE_PATH)/png.c \
                     $(LIBPNG_RELATIVE_PATH)/pngwrite.c \
                     $(LIBPNG_RELATIVE_PATH)/pngwtran.c \
                     $(LIBPNG_RELATIVE_PATH)/pngwutil.c
+
+include $(BUILD_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := freetype2
+
+LOCAL_CFLAGS := -DANDROID_NDK \
+				-DFT2_BUILD_LIBRARY=1
+
+LOCAL_C_INCLUDES := $(FREETYPE_RELATIVE_PATH)/include/config \
+					$(FREETYPE_RELATIVE_PATH)/include/ \
+					$(FREETYPE_RELATIVE_PATH)/src
+									   
+LOCAL_C_INCLUDES := $(PROJECT_ROOT)/3dparty/freetype2/include/config \
+					$(PROJECT_ROOT)/3dparty/freetype2/include \
+					$(PROJECT_ROOT)/3dparty/freetype2/src
+
+LOCAL_SRC_FILES := \
+	$(FREETYPE_RELATIVE_PATH)/src/autofit/autofit.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/basepic.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/ftapi.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/ftbase.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/ftbbox.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/ftbitmap.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/ftdbgmem.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/ftdebug.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/ftglyph.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/ftinit.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/ftpic.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/ftstroke.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/ftsynth.c \
+	$(FREETYPE_RELATIVE_PATH)/src/base/ftsystem.c \
+	$(FREETYPE_RELATIVE_PATH)/src/cff/cff.c \
+	$(FREETYPE_RELATIVE_PATH)/src/pshinter/pshinter.c \
+	$(FREETYPE_RELATIVE_PATH)/src/psnames/psnames.c \
+	$(FREETYPE_RELATIVE_PATH)/src/raster/raster.c \
+	$(FREETYPE_RELATIVE_PATH)/src/sfnt/sfnt.c \
+	$(FREETYPE_RELATIVE_PATH)/src/smooth/smooth.c \
+	$(FREETYPE_RELATIVE_PATH)/src/truetype/truetype.c
 
 include $(BUILD_STATIC_LIBRARY)
 
@@ -50,11 +89,12 @@ LOCAL_SRC_FILES := $(GAME_RELATIVE_PATH)/game.cpp \
 				   
 LOCAL_C_INCLUDES := $(PROJECT_ROOT)/common \
 					$(PROJECT_ROOT)/3dparty/glm \
-					$(PROJECT_ROOT)/3dparty/libpng
+					$(PROJECT_ROOT)/3dparty/libpng \
+					$(PROJECT_ROOT)/3dparty/freetype2/include \
 					
 
-LOCAL_LDLIBS := -lGLESv2 -llog -landroid -lz
+LOCAL_LDLIBS := -lGLESv2 -llog -landroid -lz -ldl
 
-LOCAL_STATIC_LIBRARIES := libpng
+LOCAL_STATIC_LIBRARIES := libpng freetype2
 
 include $(BUILD_SHARED_LIBRARY)
