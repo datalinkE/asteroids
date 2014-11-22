@@ -3,7 +3,10 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include "platform_gl.h"
+
 #include <map>
+#include <string>
 
 struct CharacterInfo
 {
@@ -25,6 +28,8 @@ public:
     Text();
     virtual ~Text();
 
+    void render(const std::string& text, float x, float y, float sx = 1.0f, float sy = 1.0f);
+
 private:
     static FT_Library sFreetypeGlobal;
     static bool sInited;
@@ -34,6 +39,8 @@ private:
     FT_Face mFace;
     unsigned mAtlasWidth;
     unsigned mAtlasHeight;
+
+    GLuint mAtlasHandle;
     std::map<char, CharacterInfo> mChars;
 };
 
