@@ -9,6 +9,8 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := libpng
 
+LOCAL_C_INCLUDES := $(PROJECT_ROOT)/3dparty/config/libpng
+
 LOCAL_SRC_FILES := $(LIBPNG_RELATIVE_PATH)/png.c \
                     $(LIBPNG_RELATIVE_PATH)/pngerror.c \
                     $(LIBPNG_RELATIVE_PATH)/pngget.c \
@@ -33,14 +35,8 @@ LOCAL_MODULE := freetype2
 
 LOCAL_CFLAGS := -DANDROID_NDK \
 				-DFT2_BUILD_LIBRARY=1
-
-LOCAL_C_INCLUDES := $(FREETYPE_RELATIVE_PATH)/include/config \
-					$(FREETYPE_RELATIVE_PATH)/include/ \
-					$(FREETYPE_RELATIVE_PATH)/src
 									   
-LOCAL_C_INCLUDES := $(PROJECT_ROOT)/3dparty/freetype2/include/config \
-					$(PROJECT_ROOT)/3dparty/freetype2/include \
-					$(PROJECT_ROOT)/3dparty/freetype2/src
+LOCAL_C_INCLUDES := $(PROJECT_ROOT)/3dparty/config/freetype2/include
 
 LOCAL_SRC_FILES := \
 	$(FREETYPE_RELATIVE_PATH)/src/autofit/autofit.c \
@@ -63,7 +59,8 @@ LOCAL_SRC_FILES := \
 	$(FREETYPE_RELATIVE_PATH)/src/raster/raster.c \
 	$(FREETYPE_RELATIVE_PATH)/src/sfnt/sfnt.c \
 	$(FREETYPE_RELATIVE_PATH)/src/smooth/smooth.c \
-	$(FREETYPE_RELATIVE_PATH)/src/truetype/truetype.c
+	$(FREETYPE_RELATIVE_PATH)/src/truetype/truetype.c \
+	$(FREETYPE_RELATIVE_PATH)/src/gzip/ftgzip.c
 
 include $(BUILD_STATIC_LIBRARY)
 
@@ -84,13 +81,15 @@ LOCAL_SRC_FILES := $(GAME_RELATIVE_PATH)/game.cpp \
 				   $(GAME_RELATIVE_PATH)/Timer.cpp \
 				   $(GAME_RELATIVE_PATH)/GameObject.cpp \
 				   $(GAME_RELATIVE_PATH)/GameEngine.cpp \
+				   $(GAME_RELATIVE_PATH)/Text.cpp \
 				   jni.cpp \
 				   platform_asset.cpp
 				   
 LOCAL_C_INCLUDES := $(PROJECT_ROOT)/common \
 					$(PROJECT_ROOT)/3dparty/glm \
+					$(PROJECT_ROOT)/3dparty/config/libpng \
 					$(PROJECT_ROOT)/3dparty/libpng \
-					$(PROJECT_ROOT)/3dparty/freetype2/include \
+					$(PROJECT_ROOT)/3dparty/config/freetype2/include \
 					
 
 LOCAL_LDLIBS := -lGLESv2 -llog -landroid -lz -ldl
