@@ -5,8 +5,11 @@
 
 #include "platform_gl.h"
 
+#include "ShaderProgram.hpp"
+
 #include <map>
 #include <string>
+#include <glm/glm.hpp>
 
 struct CharacterInfo
 {
@@ -28,7 +31,7 @@ public:
     Text(glm::mat4 *viewMatrix, glm::mat4 *projectionMatrix);
     virtual ~Text();
 
-    void render(const std::string& text, float x, float y, float sx = 1.0f, float sy = 1.0f);
+    void render(const std::string& text, glm::mat4* modelMatrix, float sx = 1.0f, float sy = 1.0f);
 
 private:
     static FT_Library sFreetypeGlobal;
@@ -42,5 +45,7 @@ private:
 
     GLuint mAtlasHandle;
     std::map<char, CharacterInfo> mChars;
+
+    GLuint mVbo;
 };
 

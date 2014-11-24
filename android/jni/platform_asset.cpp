@@ -21,8 +21,9 @@ JNIEXPORT void JNICALL Java_com_datalink_asteroids_RendererWrapper_init_1asset_1
 
 void release_asset_data(AAsset* asset)
 {
-    DLOG();
+    DLOG() << 1;
     AAsset_close(asset);
+    DLOG() << 2;
 }
 
 std::string get_asset_data(const char* relative_path)
@@ -35,7 +36,7 @@ std::string get_asset_data(const char* relative_path)
     assert(asset != NULL);
     DLOG() << "got asset" << relative_path;
     ON_BLOCK_EXIT(release_asset_data, asset);
-
-    return std::string(static_cast<const char*>(AAsset_getBuffer(asset)), AAsset_getLength(asset));
+    std::string result(static_cast<const char*>(AAsset_getBuffer(asset)), AAsset_getLength(asset));
+    return result;
 }
 

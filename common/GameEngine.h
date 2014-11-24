@@ -9,6 +9,7 @@
 #include "Timer.h"
 #include "GameObject.h"
 #include "QuadTree.h"
+#include "Text.h"
 
 class GameEngine
 {
@@ -35,6 +36,7 @@ private:
 
     std::unique_ptr<ShaderProgramColor> shaderProgramColor;
     std::unique_ptr<ShaderProgramTexture> shaderProgramTexture;
+    std::unique_ptr<Text> shaderProgramText;
 
     GLuint squreVBO;
     GLuint circleVBO;
