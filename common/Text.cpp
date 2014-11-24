@@ -1,5 +1,6 @@
 #include "Text.h"
 #include "Logger.hpp"
+#include "ShaderProgram.hpp"
 #include "platform_asset.h"
 #include <string>
 
@@ -17,14 +18,23 @@ void Text::initFreetype()
     sInited = true;
 }
 
-Text::Text()
+Text::Text(glm::mat4 *viewMatrix, glm::mat4 *projectionMatrix)
 	: mAtlasWidth(0)
 	, mAtlasHeight(0)
+	, ShaderProgram(viewMatrix, projectionMatrix)
 {
     if (!sInited)
     {
     	initFreetype();
     }
+
+
+	mProgramHandle = build_program_from_assets("Text.vsh", "Text.fsh");
+
+	addAttribute("coord");
+	addUniform("tex");
+	addUniform("color");
+
 
     std::string fontData = get_asset_data("Reckoner.ttf");
     int error = FT_New_Memory_Face( sFreetypeGlobal,

@@ -22,10 +22,10 @@ struct CharacterInfo
   float tx; // x offset of glyph in texture coordinates
 };
 
-class Text
+class Text : public ShaderProgram
 {
 public:
-    Text();
+    Text(glm::mat4 *viewMatrix, glm::mat4 *projectionMatrix);
     virtual ~Text();
 
     void render(const std::string& text, float x, float y, float sx = 1.0f, float sy = 1.0f);
