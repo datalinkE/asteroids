@@ -11,6 +11,7 @@ using namespace glm;
 using namespace Geometry;
 
 GameEngine::GameEngine()
+    : mFontAtlas("Reckoner.ttf", 48)
 {
     timer.Start();
 
@@ -36,7 +37,7 @@ GameEngine::GameEngine()
     texture = GLHelpers::load_png_asset_into_texture("stone.png");
     shaderProgramColor.reset(new ShaderProgramColor(&viewMatrix, &projectionMatrix));
     shaderProgramTexture.reset(new ShaderProgramTexture(&viewMatrix, &projectionMatrix));
-    shaderProgramText.reset(new Text(&viewMatrix, &projectionMatrix));
+    shaderProgramText.reset(new ShaderProgramText(&viewMatrix, &projectionMatrix));
 }
 
 GameEngine::~GameEngine()
@@ -121,8 +122,8 @@ void GameEngine::tick()
 //    shaderProgramTexture->draw(&modelMatrix, squreVBO, texture);
 
 
-    modelMatrix = translate(vec3(-1.0f, 0.0f, 0.0f));
-    shaderProgramText->render("wtf", &modelMatrix, float(1)/30, float(1)/30);
+    modelMatrix = translate(vec3(-1.0f, 0.0f, 0.0f)) * scale(vec3(0.02f));
+    shaderProgramText->draw("asteroids", &modelMatrix, mFontAtlas);
 }
 
 void GameEngine::input(float normalized_x, float normalized_y)

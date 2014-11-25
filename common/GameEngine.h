@@ -9,7 +9,8 @@
 #include "Timer.h"
 #include "GameObject.h"
 #include "QuadTree.h"
-#include "Text.h"
+#include "ShaderProgramText.h"
+#include "FontAtlas.h"
 
 class GameEngine
 {
@@ -36,7 +37,7 @@ private:
 
     std::unique_ptr<ShaderProgramColor> shaderProgramColor;
     std::unique_ptr<ShaderProgramTexture> shaderProgramTexture;
-    std::unique_ptr<Text> shaderProgramText;
+    std::unique_ptr<ShaderProgramText> shaderProgramText;
 
     GLuint squreVBO;
     GLuint circleVBO;
@@ -52,4 +53,6 @@ private:
     float mYMax;
 
     std::unique_ptr<QuadTree> mCollidables;
+
+    FontAtlas mFontAtlas;
 };
