@@ -35,6 +35,7 @@ Text::Text(glm::mat4 *viewMatrix, glm::mat4 *projectionMatrix)
 	addAttribute("coord");
 	addUniform("tex");
 	addUniform("color");
+    addUniform("u_MVPMatrix");
 
 
     std::string fontData = get_asset_data("Reckoner.ttf");
@@ -150,9 +151,7 @@ void Text::render(const std::string& text, glm::mat4* modelMatrix, float sx, flo
     glUniform1i(mUniforms["tex"], 0);
 
     /* Set up the VBO for our vertex data */
-    glEnableVertexAttribArray(mAttributes["coord"]);
-    glBindBuffer(GL_ARRAY_BUFFER, mVbo);
-    glVertexAttribPointer(mAttributes["coord"], 4, GL_FLOAT, GL_FALSE, 0, 0);
+
 
 
 	point coords[6 * text.length()];
@@ -192,7 +191,18 @@ void Text::render(const std::string& text, glm::mat4* modelMatrix, float sx, flo
 							 info.tx + info.bw / mAtlasWidth, info.bh / mAtlasHeight};
 	}
 
+	DLOG() << coords[0].x << coords[0].y << coords[0].s << coords[0].t;
+	DLOG() << coords[1].x << coords[1].y << coords[1].s << coords[1].t;
+	DLOG() << coords[2].x << coords[2].y << coords[2].s << coords[2].t;
+    DLOG() << coords[3].x << coords[3].y << coords[3].s << coords[3].t;
+    DLOG() << coords[4].x << coords[4].y << coords[4].s << coords[4].t;
+    DLOG() << coords[5].x << coords[5].y << coords[5].s << coords[5].t;
+
+    glEnableVertexAttribArray(mAttributes["coord"]);
+    glBindBuffer(GL_ARRAY_BUFFER, mVbo);
+    glVertexAttribPointer(mAttributes["coord"], 4, GL_FLOAT, GL_FALSE, 0, 0);
 	glBufferData(GL_ARRAY_BUFFER, sizeof coords, coords, GL_DYNAMIC_DRAW);
+
 	glDrawArrays(GL_TRIANGLES, 0, n);
 	glDisableVertexAttribArray(mAttributes["coord"]);
 }

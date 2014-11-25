@@ -106,6 +106,7 @@ void GameEngine::tick()
         it++;
     }
 
+    glClearColor(0.5, 0.5, 0.5, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (GameObjectPtr& object : mObjects)
@@ -121,7 +122,7 @@ void GameEngine::tick()
 
 
     modelMatrix = translate(vec3(-1.0f, 0.0f, 0.0f));
-    shaderProgramText->render("wtf", &modelMatrix);
+    shaderProgramText->render("wtf", &modelMatrix, float(1)/30, float(1)/30);
 }
 
 void GameEngine::input(float normalized_x, float normalized_y)
