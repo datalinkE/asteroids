@@ -21,10 +21,16 @@ JNIEXPORT void JNICALL jni_on_draw_frame(JNIEnv * /*env*/, jclass /*cls*/)
 	on_draw_frame();
 }
 
-JNIEXPORT void JNICALL jni_on_touch_press(JNIEnv * /*env*/, jclass /*cls*/, jfloat normalized_x, jfloat normalized_y)
+JNIEXPORT void JNICALL jni_on_touch_down(JNIEnv * /*env*/, jclass /*cls*/, jfloat normalized_x, jfloat normalized_y)
 {
     DLOG();
-	on_touch_press(normalized_x, normalized_y);
+	on_touch_down(normalized_x, normalized_y);
+}
+
+JNIEXPORT void JNICALL jni_on_touch_up(JNIEnv * /*env*/, jclass /*cls*/, jfloat normalized_x, jfloat normalized_y)
+{
+    DLOG();
+    on_touch_up(normalized_x, normalized_y);
 }
 
 JNIEXPORT void JNICALL jni_on_touch_drag(JNIEnv * /*env*/, jclass /*cls*/, jfloat normalized_x, jfloat normalized_y)
@@ -37,7 +43,8 @@ static JNINativeMethod methodTable[] = {
   {"on_surface_created", "()V", (void *) jni_on_surface_created},
   {"on_surface_changed", "(II)V", (void *) jni_on_surface_changed},
   {"on_draw_frame", "()V", (void *) jni_on_draw_frame},
-  {"on_touch_press", "(FF)V", (void *) jni_on_touch_press},
+  {"on_touch_down", "(FF)V", (void *) jni_on_touch_down},
+  {"on_touch_up", "(FF)V", (void *) jni_on_touch_up},
   {"on_touch_drag", "(FF)V", (void *) jni_on_touch_drag},
 };
 

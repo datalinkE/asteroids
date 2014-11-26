@@ -81,9 +81,16 @@ public class MainActivity extends Activity {
 	                    glSurfaceView.queueEvent(new Runnable() {
 	                    @Override
 	                    public void run() {
-	                        rendererWrapper.handleTouchPress(normalizedX, normalizedY);
+	                        rendererWrapper.handleTouchDown(normalizedX, normalizedY);
 	                    }});
-	                } 
+	                }
+	                if (event.getAction() == MotionEvent.ACTION_UP) {
+                        glSurfaceView.queueEvent(new Runnable() {
+                        @Override
+                        public void run() {
+                            rendererWrapper.handleTouchUp(normalizedX, normalizedY);
+                        }});
+                    }
 	                else if (event.getAction() == MotionEvent.ACTION_MOVE) 
 	                {
 	                    glSurfaceView.queueEvent(new Runnable() {

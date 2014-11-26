@@ -23,11 +23,16 @@ public:
 
     void tick();
 
-    void input(float normalized_x, float normalized_y);
+    void inputTap(float normX, float normY);
+
+    void inputRelease(float normX, float normY);
+
+    void inputDrag(float normX, float normY);
 
     friend class GameObject;
 
 private:
+    glm::vec3 touchDrawPlane(float normX, float normY);
 
     glm::mat4 modelMatrix;
     glm::mat4 viewMatrix;
@@ -55,4 +60,8 @@ private:
     std::unique_ptr<QuadTree> mCollidables;
 
     FontAtlas mFontAtlas;
+
+    bool mDragNow;
+    glm::vec3 mDragVector;
+    glm::vec3 mDragPoint;
 };

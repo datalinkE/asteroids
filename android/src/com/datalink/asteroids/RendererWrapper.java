@@ -22,7 +22,9 @@ public class RendererWrapper implements Renderer
     
     public static native void on_draw_frame();
  
-    private static native void on_touch_press(float normalized_x, float normalized_y);
+    private static native void on_touch_down(float normalized_x, float normalized_y);
+    
+    private static native void on_touch_up(float normalized_x, float normalized_y);
  
     private static native void on_touch_drag(float normalized_x, float normalized_y);
     
@@ -48,8 +50,12 @@ public class RendererWrapper implements Renderer
 		on_surface_created();		
 	}
 	
-    public void handleTouchPress(float normalizedX, float normalizedY) {
-        on_touch_press(normalizedX, normalizedY);
+    public void handleTouchDown(float normalizedX, float normalizedY) {
+        on_touch_down(normalizedX, normalizedY);
+    }   
+    
+    public void handleTouchUp(float normalizedX, float normalizedY) {
+        on_touch_up(normalizedX, normalizedY);
     }
  
     public void handleTouchDrag(float normalizedX, float normalizedY) {

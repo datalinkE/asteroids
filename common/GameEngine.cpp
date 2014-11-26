@@ -12,6 +12,7 @@ using namespace Geometry;
 
 GameEngine::GameEngine()
     : mFontAtlas("Reckoner.ttf", 48)
+    , mDragNow(false)
 {
     timer.Start();
 
@@ -80,7 +81,7 @@ void GameEngine::tick()
 
     for (GameObjectPtr& object : mObjects)
     {
-        object->move(timer.GetTimeSim());
+        object->move(timer.getSimDelta());
 
         if(!object->isDeleted())
         {
@@ -126,16 +127,36 @@ void GameEngine::tick()
     shaderProgramText->draw("asteroids", &modelMatrix, mFontAtlas);
 }
 
-void GameEngine::input(float normalized_x, float normalized_y)
+vec3 GameEngine::touchDrawPlane(float normX, float normY)
 {
-    DLOG() << ARG(normalized_x) << ARG(normalized_y);
-    Touch touch(normalized_x, normalized_y, &inverseViewProjectionMatrix);
-
+    Touch touch(normX, normY, &inverseViewProjectionMatrix);
     vec3 posAtDrawPlane = touch.atPlane(drawPlane);
     DLOG() << to_string(posAtDrawPlane);
-
-    mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, posAtDrawPlane, 0.5f, 5.0f)));
+    return posAtDrawPlane;
 }
 
+void GameEngine::inputTap(float normX, float normY)
+{
+    mDragNow = true;
+    DLOG() << ARG(normX) << ARG(normY);
+    mDragPoint = touchDrawPlane(normX, normY);
+    mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, mDragPoint, 0.5f, 5.0f)));
+}
+
+void GameEngine::inputRelease(float normX, float normY)
+{
+    mDragNow = false;
+    DLOG() << ARG(normX) << ARG(normY);
+}
+
+void GameEngine::inputDrag(float normX, float normY)
+{
+    DLOG() << ARG(normX) << ARG(normY);
+    vec3 pos = touchDrawPlane(normX, normY);
+    mDragVector = pos - mDragPoint;
+    mDragPoint = pos;
+
+    DLOG() << "drag vector" << mDragVector[0] << mDragVector[1];
+}
 
 

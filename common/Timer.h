@@ -7,16 +7,16 @@ public:
 	Timer(float simMultipier = 1.0f);
 	virtual ~Timer();
 
-	float			GetTimeFrame() const;
-	float			GetTimeSim() const;
-	void			SetSimMultiplier(const float simMultiplier);
+	float			getDelta() const;
+	float			getSimDelta() const;
+	Timer&			setSimMultiplier(const float simMultiplier);
 
 public:
-	virtual bool	Start();
+	virtual Timer&	Start();
 	virtual void 	OnSuspend();
-	virtual void 	Update();
+	virtual Timer& 	Update();
 	virtual void 	OnResume();
-	virtual void 	Stop();
+	virtual Timer& 	Stop();
 
 	virtual std::string getName()		{ return "Timer"; }
 
@@ -25,23 +25,24 @@ private:
 
     TimeUnits nanoTime();
 
-    TimeUnits   m_timeLastFrame;
-    float       m_frameDelta;
+    TimeUnits   m_timeLastCall;
+    float       m_callDelta;
     float       m_simMultiplier;
     float       m_simDelta;
 };
 
-inline float Timer::GetTimeFrame() const
+inline float Timer::getDelta() const
 {
-	return m_frameDelta;
+	return m_callDelta;
 }
 
-inline float Timer::GetTimeSim() const
+inline float Timer::getSimDelta() const
 {
 	return m_simDelta;
 }
 
-inline void Timer::SetSimMultiplier(const float simMultiplier)
+inline Timer& Timer::setSimMultiplier(const float simMultiplier)
 {
 	m_simMultiplier = simMultiplier;
+	return *this;
 }
