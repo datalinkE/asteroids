@@ -10,6 +10,7 @@ class GameObject
 public:
     GameObject( GameEngine* gameEngine,
                 glm::vec3 position = glm::vec3(0.0f),
+                glm::vec4 color = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
                 float boundingRadius = 1.0f,
                 float timeToLive = -1.0f,
                 glm::vec3 velocity = glm::vec3(0.0f));
@@ -19,6 +20,8 @@ public:
     virtual void move(float timeDelta);
     virtual void interfere();
     virtual void draw();
+
+    void impulse(const glm::vec3& delta);
 
     const glm::vec3& position() const
     {
@@ -57,4 +60,4 @@ protected:
     glm::vec4 mColor;
 };
 
-typedef std::unique_ptr<GameObject> GameObjectPtr;
+typedef std::shared_ptr<GameObject> GameObjectPtr;

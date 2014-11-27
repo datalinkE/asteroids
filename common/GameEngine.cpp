@@ -74,6 +74,12 @@ void GameEngine::setGameField(int width, int height)
     inverseViewProjectionMatrix = inverse(scaleMatrix) * inverseViewProjectionMatrix;
 }
 
+void GameEngine::setBaseObjects()
+{
+    mPlayer = std::make_shared<GameObject>(this, vec3(0.0f), vec4(0.2f, 0.4f, 0.4f, 1.0f));
+    mObjects.insert(mObjects.end(), mPlayer);
+}
+
 void GameEngine::tick()
 {
     timer.Update();
@@ -140,7 +146,7 @@ void GameEngine::inputTap(float normX, float normY)
     mDragNow = true;
     DLOG() << ARG(normX) << ARG(normY);
     mDragPoint = touchDrawPlane(normX, normY);
-    mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, mDragPoint, 0.5f, 5.0f)));
+    //mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, mDragPoint, vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.5f, 5.0f)));
 }
 
 void GameEngine::inputRelease(float normX, float normY)
@@ -157,6 +163,6 @@ void GameEngine::inputDrag(float normX, float normY)
     mDragPoint = pos;
 
     DLOG() << "drag vector" << mDragVector[0] << mDragVector[1];
+    mPlayer->impulse(mDragVector);
 }
-
 

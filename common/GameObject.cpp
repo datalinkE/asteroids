@@ -8,7 +8,7 @@
 
 using namespace glm;
 
-GameObject::GameObject(GameEngine* gameEngine, vec3 position, float boundingRadius, float timeToLive, vec3 velocity)
+GameObject::GameObject(GameEngine* gameEngine, vec3 position, vec4 color, float boundingRadius, float timeToLive, vec3 velocity)
     : mDeleted(false)
     , mInterfered(false)
     , mTimeToLive(timeToLive)
@@ -17,7 +17,7 @@ GameObject::GameObject(GameEngine* gameEngine, vec3 position, float boundingRadi
     , mVelocity(velocity)
     , mBoundingRadius(boundingRadius)
     , mEngine(gameEngine)
-    , mColor(0.0f, 1.0f, 0.0f, 1.0f)
+    , mColor(color)
 {
     DLOG();
 }
@@ -66,4 +66,7 @@ void GameObject::draw()
     mEngine->shaderProgramColor->draw(&mModelMatrix, mEngine->circleVBO, mColor, GL_TRIANGLE_FAN);
 }
 
-
+void GameObject::impulse(const vec3& delta)
+{
+    mVelocity += delta;
+}

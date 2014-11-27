@@ -21,6 +21,8 @@ public:
 
     void setGameField(int width, int height);
 
+    void setBaseObjects();
+
     void tick();
 
     void inputTap(float normX, float normY);
@@ -52,6 +54,7 @@ private:
     Geometry::Plane drawPlane;
     Timer timer;
 
+    GameObjectPtr mPlayer;
     std::list<GameObjectPtr> mObjects;
 
     float mXMax;

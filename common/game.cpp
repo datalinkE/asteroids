@@ -12,6 +12,7 @@ void on_surface_created()
 void on_surface_changed(int width, int height)
 {
     engine->setGameField(width, height);
+    engine->setBaseObjects();
 }
 
 void on_draw_frame()
