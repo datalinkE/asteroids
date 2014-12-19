@@ -1,5 +1,6 @@
 #include "GameEngine.h"
 
+#include <cmath>
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -84,6 +85,40 @@ void GameEngine::tick()
 {
     timer.Update();
     mCollidables->clear();
+
+    float boundingAccX = mXMax - std::abs(mPlayer->position()[0]);
+    if (boundingAccX > 0.5)
+    {
+    	boundingAccX = 0.0f;
+    }
+    if (mPlayer->position()[0] > 0)
+    {
+    	if (boundingAccX > 0)
+    		boundingAccX *= -1;
+    }
+    else
+    {
+    	if (boundingAccX < 0)
+    		boundingAccX *= -1;
+    }
+
+    float boundingAccY = mYMax - std::abs(mPlayer->position()[1]);
+    if (boundingAccY > 0.5f)
+    {
+    	boundingAccY = 0.0f;
+    }
+    if (mPlayer->position()[1] > 0)
+    {
+    	if (boundingAccY > 0)
+    		boundingAccY *= -1;
+    }
+    else
+    {
+    	if (boundingAccY < 0)
+    		boundingAccY *= -1;
+    }
+
+    mPlayer->impulse(glm::vec3(boundingAccX*std::abs(boundingAccX), boundingAccY*std::abs(boundingAccY), 0.0f));
 
     for (GameObjectPtr& object : mObjects)
     {

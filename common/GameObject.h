@@ -28,6 +28,11 @@ public:
         return mPosition;
     }
 
+    const glm::vec3& velocity() const
+    {
+        return mVelocity;
+    }
+
     float boundingRadius() const
     {
         return mBoundingRadius;
