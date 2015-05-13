@@ -31,10 +31,10 @@ void GameObject::move(float timeDelta)
 {
     mTime += timeDelta;
     mPosition += timeDelta * mVelocity;
-    mInterfered = false;
+    //mInterfered = false;
 }
 
-void GameObject::interfere()
+void GameObject::doImpacts()
 {
     if (mTimeToLive > 0 && mTime > mTimeToLive)
     {
@@ -44,19 +44,28 @@ void GameObject::interfere()
     {
         for (GameObject* other : mEngine->mCollidables->retrieve(this))
         {
-            if (other != this && !other->interferedThisTick())
+            if (other != this)
             {
-                float dist = distance(other->mPosition, this->mPosition);
-                float rr = other->mBoundingRadius + this->mBoundingRadius;
+                float dist = distance(other->position(), this->position());
+                float rr = other->boundingRadius() + this->boundingRadius();
                 if (dist < rr)
                 {
-                    other->mColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-                    this->mColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+                	//DLOG() << "impact" << ARG(dist) << ARG(rr);;
+                	other->onImpact(this);
+                	onImpact(other);
                 }
             }
         }
     }
+
     mInterfered = true;
+}
+
+
+void GameObject::onImpact(GameObject* other)
+{
+    this->mColor = vec4(0.8f, 0.8f, 0.0f, 1.0f);
+    //DLOG() << mPosition[0] << mPosition[1];
 }
 
 void GameObject::draw()

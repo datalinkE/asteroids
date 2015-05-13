@@ -83,6 +83,7 @@ LOCAL_SRC_FILES := $(GAME_RELATIVE_PATH)/game.cpp \
 				   $(GAME_RELATIVE_PATH)/GameEngine.cpp \
 				   $(GAME_RELATIVE_PATH)/ShaderProgramText.cpp \
 				   $(GAME_RELATIVE_PATH)/FontAtlas.cpp \
+				   $(GAME_RELATIVE_PATH)/Player.cpp \
 				   jni.cpp \
 				   platform_asset.cpp
 				   
