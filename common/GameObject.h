@@ -11,7 +11,7 @@ public:
     GameObject( GameEngine* gameEngine,
                 glm::vec3 position = glm::vec3(0.0f),
                 glm::vec4 color = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
-                float boundingRadius = 0.5f,
+                float size = 0.5f,
                 float timeToLive = -1.0f,
                 glm::vec3 velocity = glm::vec3(0.0f));
 
@@ -37,7 +37,7 @@ public:
 
     float boundingRadius() const
     {
-        return mBoundingRadius;
+        return mSize/2;
     }
 
     bool isDeleted() const
@@ -58,7 +58,7 @@ protected:
 
     glm::vec3 mPosition;
     glm::vec3 mVelocity;
-    float mBoundingRadius;
+    float mSize;
 
     glm::mat4 mModelMatrix;
 

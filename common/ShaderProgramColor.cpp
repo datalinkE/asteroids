@@ -1,4 +1,5 @@
 #include "ShaderProgramColor.h"
+#include <glm/gtx/transform.hpp>
 
 using namespace glm;
 using namespace GLHelpers;
@@ -20,13 +21,13 @@ ShaderProgramColor::~ShaderProgramColor()
 	DLOG();
 }
 
-void ShaderProgramColor::draw(mat4 *modelMatrix, GLuint vbo, vec4 color, GLuint drawMode)
+void ShaderProgramColor::draw(mat4 *modelMatrix, GLuint vbo, float scale, vec4 color, GLuint drawMode)
 {
 	glUseProgram(mProgramHandle);
 
 	int vertexDataSize = 4 * sizeof(GL_FLOAT);
 
-	mat4 MVPMatrix = (*mProjectionMatrix) * (*mViewMatrix) * (*modelMatrix);
+	mat4 MVPMatrix = (*mProjectionMatrix) * (*mViewMatrix) * (*modelMatrix) * glm::scale(vec3(scale));
 	glUniformMatrix4fv(mUniforms["u_MVPMatrix"], 1, GL_FALSE, glm::value_ptr(MVPMatrix));
 
 	glUniform4fv(mUniforms["u_Color"], 1, glm::value_ptr(color));

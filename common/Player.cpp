@@ -5,7 +5,7 @@
 using namespace glm;
 
 Player::Player(GameEngine* engine)
-	: GameObject(engine, vec3(0.0f), vec4(0.2f, 0.4f, 0.4f, 1.0f))
+	: GameObject(engine, vec3(0.0f), vec4(0.2f, 0.4f, 0.4f, 1.0f), 1.0f)
 {
 	DLOG();
 }

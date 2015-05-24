@@ -9,7 +9,7 @@ public:
 
 	virtual ~ShaderProgramColor();
 
-	void draw(glm::mat4 *modelMatrix, GLuint vbo, glm::vec4 color, GLuint drawMode = GL_TRIANGLE_STRIP);
+	void draw(glm::mat4 *modelMatrix, GLuint vbo, float scale, glm::vec4 color, GLuint drawMode = GL_TRIANGLE_STRIP);
 
 protected:
 	glm::vec4 mColor;

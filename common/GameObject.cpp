@@ -5,17 +5,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Logger.hpp"
 #include "GameEngine.h"
+#include "Rotation.h"
 
 using namespace glm;
 
-GameObject::GameObject(GameEngine* gameEngine, vec3 position, vec4 color, float boundingRadius, float timeToLive, vec3 velocity)
+GameObject::GameObject(GameEngine* gameEngine, vec3 position, vec4 color, float size, float timeToLive, vec3 velocity)
     : mDeleted(false)
     , mInterfered(false)
     , mTimeToLive(timeToLive)
     , mTime(0.0f)
     , mPosition(position)
     , mVelocity(velocity)
-    , mBoundingRadius(boundingRadius)
+    , mSize(size)
     , mEngine(gameEngine)
     , mColor(color)
 {
@@ -70,9 +71,12 @@ void GameObject::onImpact(GameObject* other)
 
 void GameObject::draw()
 {
-    mModelMatrix = translate( mPosition);
+    const float velocityModule = length(mVelocity);
+    const vec3 zeroRotation = vec3(1.0f, 0.0f, 0.0f);
 
-    mEngine->shaderProgramColor->draw(&mModelMatrix, mEngine->circleVBO, mColor, GL_TRIANGLE_FAN);
+    mModelMatrix = translate(mPosition) * rotationBetweenVectors(zeroRotation, velocityModule > 0.0f ? mVelocity : zeroRotation);
+
+    mEngine->shaderProgramColor->draw(&mModelMatrix, mEngine->circleVBO, mSize, mColor, GL_LINE_STRIP);
 }
 
 void GameObject::impulse(const vec3& delta)
