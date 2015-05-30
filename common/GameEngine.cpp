@@ -79,6 +79,7 @@ void GameEngine::setGameField(int width, int height)
 void GameEngine::setBaseObjects()
 {
     mPlayer = std::make_shared<Player>(this);
+    mDirectionPad = std::make_shared<DirectionPad>(this, vec3(2.0f, -2.5f, 0.0f), 2.0f);
     mObjects.insert(mObjects.end(), mPlayer);
 }
 
@@ -153,6 +154,11 @@ void GameEngine::tick()
     glClearColor(0.5, 0.5, 0.5, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    modelMatrix = translate(vec3(-1.0f, 0.0f, 0.0f)) * scale(vec3(0.02f));
+    shaderProgramText->draw("asteroids", &modelMatrix, mFontAtlas);
+
+    mDirectionPad->draw();
+
     for (GameObjectPtr& object : mObjects)
     {
         object->draw();
@@ -163,10 +169,6 @@ void GameEngine::tick()
 //
 //    modelMatrix = translate(vec3(1.0f, 0.0f, 0.0f));
 //    shaderProgramTexture->draw(&modelMatrix, squreVBO, texture);
-
-
-    modelMatrix = translate(vec3(-1.0f, 0.0f, 0.0f)) * scale(vec3(0.02f));
-    shaderProgramText->draw("asteroids", &modelMatrix, mFontAtlas);
 }
 
 vec3 GameEngine::touchDrawPlane(float normX, float normY)
@@ -182,7 +184,7 @@ void GameEngine::inputTap(float normX, float normY)
     mDragNow = true;
     DLOG() << ARG(normX) << ARG(normY);
     mDragPoint = touchDrawPlane(normX, normY);
-    mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, mDragPoint, vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.5f, 5.0f)));
+    //mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, mDragPoint, vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.5f, 5.0f)));
 }
 
 void GameEngine::inputRelease(float normX, float normY)

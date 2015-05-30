@@ -11,6 +11,7 @@
 #include "QuadTree.h"
 #include "ShaderProgramText.h"
 #include "FontAtlas.h"
+#include "DirectionPad.h"
 
 class GameEngine
 {
@@ -55,6 +56,8 @@ private:
     Timer timer;
 
     GameObjectPtr mPlayer;
+    DirectionPadPtr mDirectionPad;
+
     std::list<GameObjectPtr> mObjects;
 
     float mXMax;

@@ -69,14 +69,14 @@ void GameObject::onImpact(GameObject* other)
     //DLOG() << mPosition[0] << mPosition[1];
 }
 
-void GameObject::draw()
+void GameObject::draw(GLuint drawMode)
 {
     const float velocityModule = length(mVelocity);
     const vec3 zeroRotation = vec3(1.0f, 0.0f, 0.0f);
 
     mModelMatrix = translate(mPosition) * rotationBetweenVectors(zeroRotation, velocityModule > 0.0f ? mVelocity : zeroRotation);
 
-    mEngine->shaderProgramColor->draw(&mModelMatrix, mEngine->circleVBO, mSize, mColor, GL_LINE_STRIP);
+    mEngine->shaderProgramColor->draw(&mModelMatrix, mEngine->circleVBO, mSize, mColor, drawMode);
 }
 
 void GameObject::impulse(const vec3& delta)

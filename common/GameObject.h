@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <memory>
+#include "platform_gl.h"
 
 class GameEngine;
 
@@ -18,7 +19,7 @@ public:
     virtual ~GameObject();
 
     virtual void move(float timeDelta);
-    virtual void draw();
+    virtual void draw(GLuint drawMode = GL_LINE_STRIP);
 
     virtual void onImpact(GameObject* other);
     virtual void doImpacts();
