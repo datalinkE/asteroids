@@ -18,13 +18,16 @@ public:
 
     virtual ~GameObject();
 
-    virtual void move(float timeDelta);
+    virtual void onTick(float timeDelta);
+    virtual void setPosition(glm::vec3 position);
+    virtual void setVelocity(glm::vec3 velocity);
+
     virtual void draw(GLuint drawMode = GL_LINE_STRIP);
 
     virtual void onImpact(GameObject* other);
     virtual void doImpacts();
 
-    void impulse(const glm::vec3& delta);
+    virtual void impulse(const glm::vec3& delta);
 
     const glm::vec3& position() const
     {
@@ -59,6 +62,7 @@ protected:
 
     glm::vec3 mPosition;
     glm::vec3 mVelocity;
+    glm::vec3 mRotation;
     float mSize;
 
     glm::mat4 mModelMatrix;
@@ -66,6 +70,8 @@ protected:
     GameEngine* mEngine;
 
     glm::vec4 mColor;
+
+    static const glm::vec3 sZeroRotation;
 };
 
 typedef std::shared_ptr<GameObject> GameObjectPtr;

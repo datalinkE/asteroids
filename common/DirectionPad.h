@@ -20,18 +20,29 @@ public:
 
     void addListener(DirectionPadListenerPtr listener);
 
+    void onTick(float timeDelta);
+
     void draw();
 
     void doImpacts() {};
     void onImpact() {};
+
+    void moveStick(glm::vec3 position, glm::vec3 delta);
+    void release();
+
 private:
     GameObject mStick;
+    glm::vec3 mDelta;
+    bool mReleased;
+
     DirectionPadListenerWPtr mListener;
+
 };
 
 class DirectionPadListener
 {
 public:
-    virtual void onPadMove(glm::vec3 position, glm::vec3 delta, float timeDelta) = 0;
+    virtual void onPadMove(glm::vec3 direction, glm::vec3 delta, float timeDelta) = 0;
+    virtual ~DirectionPadListener() {};
 };
 

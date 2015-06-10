@@ -11,6 +11,7 @@
 #include "QuadTree.h"
 #include "ShaderProgramText.h"
 #include "FontAtlas.h"
+#include "Player.h"
 #include "DirectionPad.h"
 
 class GameEngine
@@ -35,6 +36,10 @@ public:
     friend class GameObject;
 
 private:
+    void boundPlayer();
+    void drawAll();
+
+private:
     glm::vec3 touchDrawPlane(float normX, float normY);
 
     glm::mat4 modelMatrix;
@@ -55,7 +60,7 @@ private:
     Geometry::Plane drawPlane;
     Timer timer;
 
-    GameObjectPtr mPlayer;
+    std::shared_ptr<Player> mPlayer;
     DirectionPadPtr mDirectionPad;
 
     std::list<GameObjectPtr> mObjects;

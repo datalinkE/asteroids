@@ -79,83 +79,52 @@ void GameEngine::setGameField(int width, int height)
 void GameEngine::setBaseObjects()
 {
     mPlayer = std::make_shared<Player>(this);
-    mDirectionPad = std::make_shared<DirectionPad>(this, vec3(2.0f, -2.5f, 0.0f), 2.0f);
+    mDirectionPad = std::make_shared<DirectionPad>(this, vec3(3.5f, -6.0f, 0.0f), 2.0f);
+    mDirectionPad->addListener(mPlayer);
     mObjects.insert(mObjects.end(), mPlayer);
 }
 
-void GameEngine::tick()
+void GameEngine::boundPlayer()
 {
-    timer.Update();
-    mCollidables->clear();
-
     float boundingAccX = mXMax - std::abs(mPlayer->position()[0]);
     if (boundingAccX > 0.5)
     {
-    	boundingAccX = 0.0f;
+        boundingAccX = 0.0f;
     }
     if (mPlayer->position()[0] > 0)
     {
-    	if (boundingAccX > 0)
-    		boundingAccX *= -1;
+        if (boundingAccX > 0)
+            boundingAccX *= -1;
     }
     else
     {
-    	if (boundingAccX < 0)
-    		boundingAccX *= -1;
+        if (boundingAccX < 0)
+            boundingAccX *= -1;
     }
 
     float boundingAccY = mYMax - std::abs(mPlayer->position()[1]);
     if (boundingAccY > 0.5f)
     {
-    	boundingAccY = 0.0f;
+        boundingAccY = 0.0f;
     }
     if (mPlayer->position()[1] > 0)
     {
-    	if (boundingAccY > 0)
-    		boundingAccY *= -1;
+        if (boundingAccY > 0)
+            boundingAccY *= -1;
     }
     else
     {
-    	if (boundingAccY < 0)
-    		boundingAccY *= -1;
+        if (boundingAccY < 0)
+            boundingAccY *= -1;
     }
 
     mPlayer->impulse(glm::vec3(boundingAccX*std::abs(boundingAccX), boundingAccY*std::abs(boundingAccY), 0.0f));
+}
 
-    for (GameObjectPtr& object : mObjects)
-    {
-        object->move(timer.getSimDelta());
-
-        if(!object->isDeleted())
-        {
-            mCollidables->insert(object.get());
-        }
-    }
-
-    for (GameObjectPtr& object : mObjects)
-    {
-        if(!object->isDeleted())
-        {
-            object->doImpacts();
-        }
-    }
-
-    for (auto it = mObjects.begin(); it != mObjects.end();)
-    {
-        if((*it)->isDeleted())
-        {
-            mObjects.erase(it++);
-            continue;
-        }
-
-        it++;
-    }
-
+void GameEngine::drawAll()
+{
     glClearColor(0.5, 0.5, 0.5, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    modelMatrix = translate(vec3(-1.0f, 0.0f, 0.0f)) * scale(vec3(0.02f));
-    shaderProgramText->draw("asteroids", &modelMatrix, mFontAtlas);
 
     mDirectionPad->draw();
 
@@ -164,11 +133,57 @@ void GameEngine::tick()
         object->draw();
     }
 
+    modelMatrix = translate(vec3(-1.0f, 3.0f, 0.0f)) * scale(vec3(0.02f));
+    shaderProgramText->draw("asteroids", &modelMatrix, mFontAtlas);
+
 //    modelMatrix = translate(vec3(-1.0f, 0.0f, -1.0f));
 //    shaderProgramColor->draw(&modelMatrix, squreVBO, vec4(0.0f, 1.0f, 0.0f, 1.0f));
 //
 //    modelMatrix = translate(vec3(1.0f, 0.0f, 0.0f));
 //    shaderProgramTexture->draw(&modelMatrix, squreVBO, texture);
+}
+
+void GameEngine::tick()
+{
+    timer.Update();
+    mCollidables->clear();
+
+    boundPlayer();
+
+    //// moving objects
+    for (GameObjectPtr& object : mObjects)
+    {
+        object->onTick(timer.getSimDelta());
+        // unrelated but could be done in the same loop
+        if(!object->isDeleted())
+        {
+            mCollidables->insert(object.get());
+        }
+    }
+
+    mDirectionPad->onTick(timer.getSimDelta());
+
+    // check for collisions and act on it
+    for (GameObjectPtr& object : mObjects)
+    {
+        if(!object->isDeleted())
+        {
+            object->doImpacts();
+        }
+    }
+
+    // actually remove deleted objects
+    for (auto it = mObjects.begin(); it != mObjects.end();)
+    {
+        if((*it)->isDeleted())
+        {
+            mObjects.erase(it++);
+            continue;
+        }
+        it++;
+    }
+
+    drawAll();
 }
 
 vec3 GameEngine::touchDrawPlane(float normX, float normY)
@@ -191,6 +206,13 @@ void GameEngine::inputRelease(float normX, float normY)
 {
     mDragNow = false;
     DLOG() << ARG(normX) << ARG(normY);
+    vec3 pos = touchDrawPlane(normX, normY);
+
+    float distanceToPad = distance(pos, mDirectionPad->position());
+    if (distanceToPad < mDirectionPad->boundingRadius() * 2)
+    {
+        mDirectionPad->release();
+    }
 }
 
 void GameEngine::inputDrag(float normX, float normY)
@@ -201,6 +223,12 @@ void GameEngine::inputDrag(float normX, float normY)
     mDragPoint = pos;
 
     DLOG() << "drag vector" << mDragVector[0] << mDragVector[1];
-    mPlayer->impulse(mDragVector);
+    //mPlayer->impulse(mDragVector);
+
+    float distanceToPad = distance(pos, mDirectionPad->position());
+    if (distanceToPad < mDirectionPad->boundingRadius())
+    {
+        mDirectionPad->moveStick(pos, mDragVector);
+    }
 }
 

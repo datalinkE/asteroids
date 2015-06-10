@@ -24,3 +24,30 @@ void Player::onImpact(GameObject* other)
     mPosition += 0.05f * mVelocity;
 }
 
+void Player::onPadMove(vec3 direction, vec3 delta, float timeDelta)
+{
+    float value = std::min(length(direction), 0.5f);
+    if (value > std::numeric_limits<float>::epsilon())
+    {
+        mRotation = direction;
+        if (value == 0.5f)
+        {
+            impulse(direction*0.03f);
+        }
+    }
+    else
+    {
+        DLOG() << "deceleration";
+        impulse(-mVelocity * 0.5f);
+    }
+}
+
+void Player::impulse(const vec3& delta)
+{
+    vec3 oldVelocity = mVelocity;
+    GameObject::impulse(delta);
+    if (length(mVelocity) > 2.0f)
+    {
+        mVelocity = oldVelocity;
+    }
+}
