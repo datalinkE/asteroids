@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
+import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,8 +15,55 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private GLSurfaceView glSurfaceView;
+	
 	private boolean rendererSet;
 	private RendererWrapper rendererWrapper;
+	
+	private void setGLSurfaceView()
+	{
+	    int desiredRBits = 8;
+	    int desiredGBits = 8;
+	    int desiredBBits = 8;
+	    int desiredABits = 8;
+	    
+        glSurfaceView = new GLSurfaceView(this);
+        glSurfaceView.setEGLContextClientVersion(2);
+        int pFmt= getWindowManager().getDefaultDisplay().getPixelFormat();
+        
+        if (pFmt > 0)
+        {
+            PixelFormat info = new PixelFormat();
+            PixelFormat.getPixelFormatInfo(pFmt, info);
+
+            if (PixelFormat.formatHasAlpha(pFmt)) {
+
+                if (info.bitsPerPixel >= 24) {
+                    desiredABits = 8;
+                } else {
+                    desiredABits = 6;  // total guess
+                }
+
+            } else {
+                desiredABits = 0;
+            }
+            
+            if (info.bitsPerPixel >= 24) {
+                desiredRBits = 8;
+                desiredGBits = 8;
+                desiredBBits = 8;
+            } else if (info.bitsPerPixel >= 16) {
+                desiredRBits = 5;
+                desiredGBits = 6;
+                desiredBBits = 5;
+            } else {
+                desiredRBits = 4;
+                desiredGBits = 4;
+                desiredBBits = 4;
+            }
+        }
+        
+        glSurfaceView.setEGLConfigChooser(desiredRBits, desiredGBits, desiredBBits, desiredABits, 16, 0);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -42,10 +90,7 @@ public class MainActivity extends Activity {
 
         if (supportsEs2 || looksLikeEmulator) 
         {
-        	glSurfaceView = new GLSurfaceView(this);
-        	glSurfaceView.setEGLContextClientVersion(2);
-        	glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0); // TODO: find out optimal value
-            
+            setGLSurfaceView();
         	rendererWrapper = new RendererWrapper(this);
         	glSurfaceView.setRenderer(rendererWrapper);
         	setOnTouchListener();
