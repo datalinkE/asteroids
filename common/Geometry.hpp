@@ -5,6 +5,8 @@
 
 namespace Geometry
 {
+    static float eps = std::numeric_limits<float>::epsilon() * 200;
+
 	struct Line
 	{
 		glm::vec3 point;

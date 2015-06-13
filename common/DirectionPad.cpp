@@ -1,10 +1,11 @@
 #include "DirectionPad.h"
 #include "Logger.hpp"
+#include "Geometry.hpp"
 
 using namespace glm;
 
-const vec4 PAD_COLOR(0.5f, 0.3f, 0.0f, 1.0f);
-const vec4 STICK_COLOR(0.8f, 0.8f, 0.3f, 1.0f);
+const vec4 PAD_COLOR(0.5f, 0.3f, 0.0f, 0.6f);
+const vec4 STICK_COLOR(0.8f, 0.8f, 0.3f, 0.8f);
 
 DirectionPad::DirectionPad(GameEngine* engine, glm::vec3 center, float size)
     : GameObject(engine, center, PAD_COLOR, size)
@@ -44,17 +45,19 @@ void DirectionPad::onTick(float timeDelta)
         stickVelocity = stickVector;
     }
 
-    if (mReleased && mTime > 0.3f)
+    if (mReleased && mTime > 0.1f)
     {
         stickVelocity = stickVector / timeDelta;
 
-        if (stickDistance > std::numeric_limits<float>::epsilon())
+        if (stickDistance > Geometry::eps)
         {
             stickVelocity /= 20;
         }
         else
         {
             mStick.setPosition(mPosition);
+            stickVelocity = vec3(0.0f);
+            stickVector = vec3(0.0f);
         }
     }
     mStick.setVelocity(stickVelocity);

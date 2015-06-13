@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Logger.hpp"
+#include "Geometry.hpp"
 #include <glm/gtx/projection.hpp>
 
 using namespace glm;
@@ -27,27 +28,27 @@ void Player::onImpact(GameObject* other)
 void Player::onPadMove(vec3 direction, vec3 delta, float timeDelta)
 {
     float value = std::min(length(direction), 0.5f);
-    if (value > std::numeric_limits<float>::epsilon())
+
+    if (value > Geometry::eps)
     {
         mRotation = direction;
         if (value == 0.5f)
         {
-            impulse(direction*0.03f);
+            impulse(direction*0.08f);
         }
     }
     else
     {
-        DLOG() << "deceleration";
-        impulse(-mVelocity * 0.5f);
+        impulse(-mVelocity * 0.003f);
     }
 }
 
 void Player::impulse(const vec3& delta)
 {
-    vec3 oldVelocity = mVelocity;
+    const float MAX_VELOCITY = 2.5f;
     GameObject::impulse(delta);
-    if (length(mVelocity) > 2.0f)
+    if (length(mVelocity) > MAX_VELOCITY)
     {
-        mVelocity = oldVelocity;
+        mVelocity = glm::normalize(mVelocity) * MAX_VELOCITY;
     }
 }
