@@ -199,7 +199,7 @@ void GameEngine::inputTap(float normX, float normY)
     mDragNow = true;
     DLOG() << ARG(normX) << ARG(normY);
     mDragPoint = touchDrawPlane(normX, normY);
-    //mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, mDragPoint, vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.5f, 5.0f)));
+    mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, mDragPoint, vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.5f, 5.0f)));
 }
 
 void GameEngine::inputRelease(float normX, float normY)
@@ -209,7 +209,7 @@ void GameEngine::inputRelease(float normX, float normY)
     vec3 pos = touchDrawPlane(normX, normY);
 
     float distanceToPad = distance(pos, mDirectionPad->position());
-    if (distanceToPad < mDirectionPad->boundingRadius() * 2)
+    if (distanceToPad < mDirectionPad->boundingRadius() * 5)
     {
         mDirectionPad->release();
     }
@@ -222,11 +222,8 @@ void GameEngine::inputDrag(float normX, float normY)
     mDragVector = pos - mDragPoint;
     mDragPoint = pos;
 
-    DLOG() << "drag vector" << mDragVector[0] << mDragVector[1];
-    //mPlayer->impulse(mDragVector);
-
     float distanceToPad = distance(pos, mDirectionPad->position());
-    if (distanceToPad < mDirectionPad->boundingRadius())
+    if (distanceToPad < mDirectionPad->boundingRadius() * 3)
     {
         mDirectionPad->moveStick(pos, mDragVector);
     }

@@ -8,6 +8,7 @@ import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -114,6 +115,7 @@ public class MainActivity extends Activity {
 	        @Override
 	        public boolean onTouch(View v, MotionEvent event) 
 	        {
+	            final String TAG = "boolean onTouch(View v, MotionEvent event)";
 	            if (event != null) 
 	            {
 	                // Convert touch coordinates into normalized device
@@ -122,22 +124,34 @@ public class MainActivity extends Activity {
 	                final float normalizedX = (event.getX() / (float) v.getWidth()) * 2 - 1;
 	                final float normalizedY = -((event.getY() / (float) v.getHeight()) * 2 - 1);
 	         
-	                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+	                int action = event.getAction();
+	                
+	                
+	                if (action == MotionEvent.ACTION_DOWN) {
+	                    Log.d(TAG, "ACTION_DOWN");
 	                    glSurfaceView.queueEvent(new Runnable() {
 	                    @Override
 	                    public void run() {
 	                        rendererWrapper.handleTouchDown(normalizedX, normalizedY);
 	                    }});
 	                }
-	                if (event.getAction() == MotionEvent.ACTION_UP) {
+	                else if (action == MotionEvent.ACTION_POINTER_DOWN) {
+                        Log.d(TAG, "ACTION_POINTER_DOWN");
+                    }
+	                else if (action == MotionEvent.ACTION_UP) {
+	                    Log.d(TAG, "ACTION_UP");
                         glSurfaceView.queueEvent(new Runnable() {
                         @Override
                         public void run() {
                             rendererWrapper.handleTouchUp(normalizedX, normalizedY);
                         }});
                     }
-	                else if (event.getAction() == MotionEvent.ACTION_MOVE) 
+                    else if (action == MotionEvent.ACTION_POINTER_UP) {
+                        Log.d(TAG, "ACTION_POINTER_UP");
+                    }
+	                else if (action == MotionEvent.ACTION_MOVE) 
 	                {
+	                    Log.d(TAG, "ACTION_MOVE");
 	                    glSurfaceView.queueEvent(new Runnable() {
 	                    @Override
 	                    public void run() {

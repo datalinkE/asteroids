@@ -40,9 +40,10 @@ void DirectionPad::onTick(float timeDelta)
     float stickDistance = length(stickVector);
 
     vec3 stickVelocity = vec3(0.0f);
-    if (  (stickDistance > boundingRadius() - mStick.boundingRadius() / 2))
+    if (stickDistance > boundingRadius())
     {
-        stickVelocity = stickVector;
+        stickVector = normalize(stickVector) * boundingRadius();
+        mStick.setPosition(mPosition - stickVector);
     }
 
     if (mReleased && mTime > 0.1f)
