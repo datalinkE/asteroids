@@ -83,6 +83,7 @@ void GameEngine::setBaseObjects()
     mDirectionPad->addListener(mPlayer);
 
     mFireButton = std::make_shared<Button>(this, vec3(-3.5f, 6.0f, 0.0f), 2.0f);
+    mFireButton->addListener(mPlayer);
 
     mObjects.insert(mObjects.end(), mPlayer);
 }
@@ -166,6 +167,7 @@ void GameEngine::tick()
     }
 
     mDirectionPad->onTick(timer.getSimDelta());
+    mFireButton->onTick(timer.getSimDelta());
 
     // check for collisions and act on it
     for (GameObjectPtr& object : mObjects)
@@ -218,7 +220,7 @@ void GameEngine::inputTap(float normX, float normY)
     }
     else
     {
-        mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, mDragPoint, vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.5f, 5.0f)));
+        mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, mDragPoint, vec4(0.0f, 1.0f, 0.0f, 1.0f), 1.5f, 5.0f)));
     }
 }
 

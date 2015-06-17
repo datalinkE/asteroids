@@ -35,6 +35,7 @@ public:
     void inputDrag(float normX, float normY);
 
     friend class GameObject;
+    friend class Player;
 
 private:
     void boundPlayer();

@@ -43,9 +43,12 @@ void Button::release()
 
 void Button::onTick(float timeDelta)
 {
-    ButtonListenerPtr listener = mListener.lock();
-    if (listener)
+    if (!mReleased)
     {
-        listener->onPush(timeDelta);
+        ButtonListenerPtr listener = mListener.lock();
+        if (listener)
+        {
+            listener->onPush(timeDelta);
+        }
     }
 }
