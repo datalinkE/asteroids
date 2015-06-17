@@ -13,6 +13,7 @@
 #include "FontAtlas.h"
 #include "Player.h"
 #include "DirectionPad.h"
+#include "Button.h"
 
 class GameEngine
 {
@@ -62,6 +63,7 @@ private:
 
     std::shared_ptr<Player> mPlayer;
     DirectionPadPtr mDirectionPad;
+    ButtonPtr mFireButton;
 
     std::list<GameObjectPtr> mObjects;
 

@@ -81,6 +81,9 @@ void GameEngine::setBaseObjects()
     mPlayer = std::make_shared<Player>(this);
     mDirectionPad = std::make_shared<DirectionPad>(this, vec3(3.5f, -6.0f, 0.0f), 2.0f);
     mDirectionPad->addListener(mPlayer);
+
+    mFireButton = std::make_shared<Button>(this, vec3(-3.5f, 6.0f, 0.0f), 2.0f);
+
     mObjects.insert(mObjects.end(), mPlayer);
 }
 
@@ -127,6 +130,7 @@ void GameEngine::drawAll()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     mDirectionPad->draw();
+    mFireButton->draw();
 
     for (GameObjectPtr& object : mObjects)
     {
@@ -198,8 +202,24 @@ void GameEngine::inputTap(float normX, float normY)
 {
     mDragNow = true;
     DLOG() << ARG(normX) << ARG(normY);
-    mDragPoint = touchDrawPlane(normX, normY);
-    mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, mDragPoint, vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.5f, 5.0f)));
+    vec3 pos = touchDrawPlane(normX, normY);
+    mDragVector = pos - mDragPoint;
+    mDragPoint = pos;
+
+    float distanceToPad = distance(pos, mDirectionPad->position());
+    float distanceToButton =  distance(pos, mFireButton->position());
+    if (distanceToButton < mFireButton->boundingRadius())
+    {
+        mFireButton->push();
+    }
+    else if (distanceToPad < mDirectionPad->boundingRadius() * 3)
+    {
+        mDirectionPad->moveStick(pos, mDragVector);
+    }
+    else
+    {
+        mObjects.insert(mObjects.end(), GameObjectPtr(new GameObject(this, mDragPoint, vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.5f, 5.0f)));
+    }
 }
 
 void GameEngine::inputRelease(float normX, float normY)
@@ -207,11 +227,19 @@ void GameEngine::inputRelease(float normX, float normY)
     mDragNow = false;
     DLOG() << ARG(normX) << ARG(normY);
     vec3 pos = touchDrawPlane(normX, normY);
+    mDragVector = pos - mDragPoint;
+    mDragPoint = pos;
 
     float distanceToPad = distance(pos, mDirectionPad->position());
     if (distanceToPad < mDirectionPad->boundingRadius() * 5)
     {
         mDirectionPad->release();
+    }
+
+    float distanceToButton =  distance(pos, mFireButton->position());
+    if (distanceToButton < mFireButton->boundingRadius() * 5)
+    {
+        mFireButton->release();
     }
 }
 

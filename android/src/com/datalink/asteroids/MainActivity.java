@@ -118,20 +118,19 @@ public class MainActivity extends Activity {
                 final String TAG = "boolean onTouch(View v, MotionEvent event)";
                 if (event != null) 
                 {
+                    
+                    final int pointerIndex = event.getActionIndex();
+                    final float x = event.getX(pointerIndex);
+                    final float y = event.getY(pointerIndex);
+                    
                     // Convert touch coordinates into normalized device
                     // coordinates, keeping in mind that Android's Y
                     // coordinates are inverted.
-                    final float normalizedX = (event.getX() / (float) v.getWidth()) * 2 - 1;
-                    final float normalizedY = -((event.getY() / (float) v.getHeight()) * 2 - 1);
+                    
+                    final float normalizedX = (x / (float) v.getWidth()) * 2 - 1;
+                    final float normalizedY = -((y / (float) v.getHeight()) * 2 - 1);
 
-                    int action = event.getActionMasked();
-                    /*
-                    int pointerIndex = event.getActionIndex();
-                    int pointerCount = event.getPointerCount();          
-                    event.getPointerId(pointerIndex);
-                    event.getX(pointerIndex);
-                    event.getY(pointerIndex);
-                    */
+                    final int action = event.getActionMasked();
 
                     switch (action) 
                     {
@@ -170,8 +169,6 @@ public class MainActivity extends Activity {
                         }
                         break;
                     }
-
-
                     return true;
                 }
                 else 

@@ -86,6 +86,7 @@ LOCAL_SRC_FILES := $(GAME_RELATIVE_PATH)/game.cpp \
 				   $(GAME_RELATIVE_PATH)/Player.cpp \
 				   $(GAME_RELATIVE_PATH)/Rotation.cpp \
 				   $(GAME_RELATIVE_PATH)/DirectionPad.cpp \
+				   $(GAME_RELATIVE_PATH)/Button.cpp \
 				   jni.cpp \
 				   platform_asset.cpp
 				   
