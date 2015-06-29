@@ -1,5 +1,7 @@
 package com.datalink.asteroids;
 
+import vandy.mooc.utils.GenericActivity;
+import vandy.mooc.utils.Utils;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -14,7 +16,10 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends GenericActivity<GameOps> {
+    
+    private final static String TAG = MainActivity.class.getCanonicalName();
+    
     private GLSurfaceView glSurfaceView;
 
     private boolean rendererSet;
@@ -69,7 +74,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
-        super.onCreate(savedInstanceState);
+        // Call up to the special onCreate() method in GenericActivity
+        super.onCreate(savedInstanceState, GameOps.class);
 
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
@@ -92,7 +98,7 @@ public class MainActivity extends Activity {
                 if (supportsEs2 || looksLikeEmulator) 
                 {
                     setGLSurfaceView();
-                    rendererWrapper = new RendererWrapper(this);
+                    rendererWrapper = getOps().getRendererWrapper();
                     glSurfaceView.setRenderer(rendererWrapper);
                     setOnTouchListener();
                     rendererSet = true;                        
