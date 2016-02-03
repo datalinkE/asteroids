@@ -6,13 +6,19 @@ std::unique_ptr<GameEngine> engine;
 void on_surface_created()
 {
 	DLOG();
-	engine.reset(new GameEngine());
 }
 
 void on_surface_changed(int width, int height)
 {
-    engine->setGameField(width, height);
-    engine->setBaseObjects();
+    DLOG();
+    static bool once = false;
+    if (!once)
+    {
+        engine.reset(new GameEngine());
+        engine->setGameField(width, height);
+        engine->setBaseObjects();
+        once = true;
+    }
 }
 
 void on_draw_frame()

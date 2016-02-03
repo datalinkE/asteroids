@@ -99,6 +99,7 @@ public class MainActivity extends GenericActivity<GameOps> {
                 {
                     setGLSurfaceView();
                     rendererWrapper = getOps().getRendererWrapper();
+                    glSurfaceView.setPreserveEGLContextOnPause(true);
                     glSurfaceView.setRenderer(rendererWrapper);
                     setOnTouchListener();
                     rendererSet = true;                        
